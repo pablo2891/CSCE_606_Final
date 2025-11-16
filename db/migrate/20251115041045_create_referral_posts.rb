@@ -16,9 +16,9 @@ class CreateReferralPosts < ActiveRecord::Migration[7.1]
 
       # For Rails enum: status: { active: 0, paused: 1, closed: 2 }
       t.integer :status, default: 0, null: false
-
-      t.jsonb :additional_criteria, default: {}
-      t.jsonb :request_criteria, default: {}
+      # changed to json
+      t.json :additional_criteria, default: {}
+      t.json :request_criteria, default: {}
 
       t.timestamps
     end
