@@ -1,0 +1,139 @@
+/* ---------------------------------------
+   Texas A&M Styled Utility Classes
+   --------------------------------------- */
+
+/* Brand Colors */
+:root {
+  --primary: #500000;
+  --secondary: #ffffff;
+
+  --brand-dark: #3c001c;
+  --brand-light: #732f2f;
+
+  --gray-100: #f6f6f6;
+  --gray-200: #eaeaea;
+  --gray-300: #d1d1d1;
+  --gray-400: #a7a7a7;
+  --gray-500: #707070;
+  --gray-600: #626262;
+  --gray-700: #535353;
+  --gray-800: #3e3e3e;
+  --gray-900: #202020;
+}
+
+/* -----------------------
+   Basic Background Colors
+   ----------------------- */
+.bg-primary     { background-color: var(--primary); }
+.bg-secondary   { background-color: var(--secondary); }
+.bg-brand-dark  { background-color: var(--brand-dark); }
+.bg-brand-light { background-color: var(--brand-light); }
+
+.bg-gray-100 { background-color: var(--gray-100); }
+.bg-gray-200 { background-color: var(--gray-200); }
+.bg-gray-300 { background-color: var(--gray-300); }
+.bg-gray-400 { background-color: var(--gray-400); }
+.bg-gray-500 { background-color: var(--gray-500); }
+.bg-gray-600 { background-color: var(--gray-600); }
+.bg-gray-700 { background-color: var(--gray-700); }
+.bg-gray-800 { background-color: var(--gray-800); }
+.bg-gray-900 { background-color: var(--gray-900); }
+
+/* -----------------------
+   Text Colors
+   ----------------------- */
+.text-primary     { color: var(--primary); }
+.text-secondary   { color: var(--secondary); }
+.text-brand-dark  { color: var(--brand-dark); }
+.text-brand-light { color: var(--brand-light); }
+
+.text-gray-100 { color: var(--gray-100); }
+.text-gray-200 { color: var(--gray-200); }
+.text-gray-300 { color: var(--gray-300); }
+.text-gray-400 { color: var(--gray-400); }
+.text-gray-500 { color: var(--gray-500); }
+.text-gray-600 { color: var(--gray-600); }
+.text-gray-700 { color: var(--gray-700); }
+.text-gray-800 { color: var(--gray-800); }
+.text-gray-900 { color: var(--gray-900); }
+
+/* -----------------------
+   Border Colors
+   ----------------------- */
+.border-primary     { border-color: var(--primary); }
+.border-secondary   { border-color: var(--secondary); }
+.border-brand-dark  { border-color: var(--brand-dark); }
+.border-brand-light { border-color: var(--brand-light); }
+
+.border-gray-100 { border-color: var(--gray-100); }
+.border-gray-200 { border-color: var(--gray-200); }
+.border-gray-300 { border-color: var(--gray-300); }
+.border-gray-400 { border-color: var(--gray-400); }
+.border-gray-500 { border-color: var(--gray-500); }
+.border-gray-600 { border-color: var(--gray-600); }
+.border-gray-700 { border-color: var(--gray-700); }
+.border-gray-800 { border-color: var(--gray-800); }
+.border-gray-900 { border-color: var(--gray-900); }
+
+/* -----------------------
+   Hover States
+   ----------------------- */
+.hover\:bg-primary:hover        { background-color: var(--primary); }
+.hover\:bg-brand-dark:hover     { background-color: var(--brand-dark); }
+.hover\:bg-brand-light:hover    { background-color: var(--brand-light); }
+.hover\:bg-secondary:hover      { background-color: var(--secondary); }
+
+.hover\:text-primary:hover      { color: var(--primary); }
+.hover\:text-brand-dark:hover   { color: var(--brand-dark); }
+.hover\:text-brand-light:hover  { color: var(--brand-light); }
+.hover\:text-secondary:hover    { color: var(--secondary); }
+
+.hover\:border-primary:hover     { border-color: var(--primary); }
+.hover\:border-brand-dark:hover  { border-color: var(--brand-dark); }
+.hover\:border-brand-light:hover { border-color: var(--brand-light); }
+.hover\:border-secondary:hover   { border-color: var(--secondary); }
+
+/* -----------------------
+   Utility Helpers
+   ----------------------- */
+.rounded       { border-radius: 4px; }
+.rounded-md    { border-radius: 6px; }
+.rounded-lg    { border-radius: 10px; }
+.rounded-full  { border-radius: 9999px; }
+
+.p-2 { padding: .5rem; }
+.p-3 { padding: .75rem; }
+.p-4 { padding: 1rem; }
+
+.m-2 { margin: .5rem; }
+.m-3 { margin: .75rem; }
+.m-4 { margin: 1rem; }
+
+.border        { border-width: 1px; }
+.border-2      { border-width: 2px; }
+.border-4      { border-width: 4px; }
+
+.font-bold     { font-weight: 700; }
+.font-medium   { font-weight: 500; }
+.font-light    { font-weight: 300; }
+
+/* Button Presets */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .15s, color .15s, border-color .15s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--secondary);
+}
+
+.btn-primary:hover {
+  background: var(--brand-dark);
+}
+
+
+

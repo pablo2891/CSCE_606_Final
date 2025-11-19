@@ -1,49 +1,57 @@
-<h1>Sign Up</h1>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 py-10">
+  <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+    <h1 class="text-3xl font-bold text-center mb-6 text-primary">Sign Up</h1>
 
-<%= form_with model: @user, local: true, data: { turbo: false } do |f| %>
-  <p>
-    <%= f.label :first_name %><br>
-    <%= f.text_field :first_name %>
-    <% if @user.errors[:first_name].any? %>
-      <div class="field-error"><%= @user.errors[:first_name].join(", ") %></div>
+    <%= form_with model: @user, local: true, data: { turbo: false }, class: "space-y-5" do |f| %>
+
+      <div>
+        <%= f.label :first_name, class: "block font-medium mb-1 text-gray-800" %>
+        <%= f.text_field :first_name, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-light focus:border-brand-light focus:outline-none" %>
+        <% if @user.errors[:first_name].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @user.errors[:first_name].join(", ") %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.label :last_name, class: "block font-medium mb-1 text-gray-800" %>
+        <%= f.text_field :last_name, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-light focus:border-brand-light focus:outline-none" %>
+        <% if @user.errors[:last_name].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @user.errors[:last_name].join(", ") %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.label :email, class: "block font-medium mb-1 text-gray-800" %>
+        <%= f.email_field :email, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-light focus:border-brand-light focus:outline-none" %>
+        <% if @user.errors[:email].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @user.errors[:email].join(", ") %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.label :password, class: "block font-medium mb-1 text-gray-800" %>
+        <%= f.password_field :password, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-light focus:border-brand-light focus:outline-none" %>
+        <% if @user.errors[:password].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @user.errors[:password].join(", ") %></p>
+        <% end %>
+      </div>
+
+      <div class="mb-4">
+        <%= f.label :password_confirmation, class: "block font-medium mb-1 text-gray-800" %>
+        <%= f.password_field :password_confirmation, class: "w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-brand-light focus:border-brand-light focus:outline-none" %>
+        <% if @user.errors[:password_confirmation].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @user.errors[:password_confirmation].join(", ") %></p>
+        <% end %>
+      </div>
+
+      <div>
+        <%= f.submit "Sign Up", class: "w-full bg-primary text-secondary py-2 rounded-lg hover:bg-brand-dark cursor-pointer" %>
+      </div>
+
     <% end %>
-  </p>
 
-  <p>
-    <%= f.label :last_name %><br>
-    <%= f.text_field :last_name %>
-    <% if @user.errors[:last_name].any? %>
-      <div class="field-error"><%= @user.errors[:last_name].join(", ") %></div>
-    <% end %>
-  </p>
-
-  <p>
-    <%= f.label :email %><br>
-    <%= f.email_field :email %>
-    <% if @user.errors[:email].any? %>
-      <div class="field-error"><%= @user.errors[:email].join(", ") %></div>
-    <% end %>
-  </p>
-
-  <p>
-    <%= f.label :password %><br>
-    <%= f.password_field :password %>
-    <% if @user.errors[:password].any? %>
-      <div class="field-error"><%= @user.errors[:password].join(", ") %></div>
-    <% end %>
-  </p>
-
-  <p>
-    <%= f.label :password_confirmation %><br>
-    <%= f.password_field :password_confirmation %>
-    <% if @user.errors[:password_confirmation].any? %>
-      <div class="field-error"><%= @user.errors[:password_confirmation].join(", ") %></div>
-    <% end %>
-  </p>
-
-  <p>
-    <%= f.submit "Sign Up" %>
-  </p>
-<% end %>
-
-<%= link_to "Log in", login_path %>
+    <div class="text-center mt-4">
+      <%= link_to "Log in", login_path, class: "block w-full text-primary bg-secondary py-2 rounded-lg hover-opacity-80 cursor-pointer border border-primary" %>
+    </div>
+  </div>
+</div>
