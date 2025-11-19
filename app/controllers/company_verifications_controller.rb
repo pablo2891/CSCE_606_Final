@@ -7,15 +7,7 @@ class CompanyVerificationsController < ApplicationController
 
   # GET /company_verifications/new
   def new
-    @company_verification = CompanyVerification.create(user_id: session[:user_id])
-    # TODO: Send verification email with generated token
-  end
-
-  # GET /company_verifications/1/edit
-  def edit
-    @company_verification.regenerate_validation_token
-    @company_verification.is_verified = false
-    # TODO: Send verification email with newly generated token
+    @company_verification = CompanyVerification.new
   end
 
   # POST /company_verifications or /company_verifications.json
@@ -43,6 +35,6 @@ class CompanyVerificationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def company_verification_params
-      params.expect(company_verification: [ :company_email, :company_name, :verification_token ])
+      params.expect(company_verification: [ :company_email, :company_name ])
     end
 end
