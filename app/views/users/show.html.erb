@@ -1,6 +1,146 @@
-<h1>Profile</h1>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <!-- Profile Card -->
+      <div class="card shadow-lg rounded-lg border-tamu-gray-300">
+        <!-- Header -->
+        <div class="card-header bg-tamu-maroon text-tamu-white d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="mb-1 d-flex align-items-center">
+                <%= @user.full_name %>
+                
+                <% if @user.is_tamu_verified %>
+                    <span class="ms-2 badge bg-tamu-white text-tamu-maroon font-bold p-2 rounded-md">
+                    TAMU Verified
+                    </span>
+                <% end %>
+                </h2>
+                <p class="mb-0 font-medium"><%= @user.headline.presence || "Your headline goes here" %></p>
+            </div>
+            <% if logged_in? && current_user == @user %>
+              <div class="d-flex gap-4">
+                <%= button_to "Edit Profile", edit_user_path(@user), method: :get, class: "tamu-btn tamu-btn-maroon" %>
+                <%= button_to "Log Out", session_path, method: :delete, class: "tamu-btn tamu-btn-maroon" %>
+              </div>
+            <% end %>
+        </div>
 
-<p><strong>Full Name:</strong> <%= @user.full_name %></p>
-<p><strong>Email:</strong> <%= @user.email %></p>
+        <div class="card-body bg-tamu-gray-100">
+          <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-md-4 mb-4">
+              <div class="card rounded-md p-3 border-tamu-gray-300">
+                <h5 class="font-bold mb-2">Contact</h5>
+                <p class="mb-1"><strong>Email:</strong> <%= @user.email %></p>
+                <% if @user.linkedin_url.present? %>
+                  <p class="mb-1"><strong>LinkedIn:</strong> <a href="<%= @user.linkedin_url %>" target="_blank" class="text-tamu-maroon hover:underline"><%= @user.linkedin_url %></a></p>
+                <% end %>
+                <% if @user.github_url.present? %>
+                  <p class="mb-1"><strong>GitHub:</strong> <a href="<%= @user.github_url %>" target="_blank" class="text-tamu-maroon hover:underline"><%= @user.github_url %></a></p>
+                <% end %>
+                <% if @user.resume_url.present? %>
+                  <p class="mb-1"><strong>Resume:</strong> <a href="<%= @user.resume_url %>" target="_blank" class="text-tamu-maroon hover:underline">View</a></p>
+                <% end %>
+              </div>
+              <div class="card rounded-md p-3 border-tamu-gray-300 mt-4">
+                <h5 class="font-bold mb-2">Verified Companies</h5>
+                <% if @verified_companies.any? %>
+                  <ul class="list-group list-group-flush">
+                    <% @verified_companies.each do |cv| %>
+                      <li class="list-group-item d-flex justify-content-between align-items-center border-tamu-gray-200">
+                        <span><%= cv.company_name %></span>
+                        <span class="text-success fw-semibold">Verified ✔️</span>
+                      </li>
+                    <% end %>
+                  </ul>
+                <% else %>
+                  <p class="text-tamu-gray-700 mb-0">No verified companies yet.</p>
+                <% end %>
+              </div>
+            </div>
 
-<%= link_to "Log Out", logout_path, method: :delete %>
+            <!-- Main Content -->
+            <div class="col-md-8">
+              <!-- Summary -->
+              <div class="mb-4 p-3 bg-tamu-white rounded-md border-tamu-gray-300">
+                <h5 class="font-bold mb-2">Summary</h5>
+                <p><%= @user.summary.presence || "No summary provided yet." %></p>
+              </div>
+
+              <!-- Experiences -->
+              <div class="mb-4 p-3 bg-tamu-white rounded-md border-tamu-gray-300">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="font-bold mb-0">Experiences</h5>
+                  <% if logged_in? && current_user == @user %>
+                    <%= link_to "Add Experience", add_experience_user_path(@user), class: "tamu-btn tamu-btn-maroon btn-sm text-decoration-none" %>
+                  <% end %>
+                </div>
+                <% if @user.experiences_data.any? %>
+                  <% @user.experiences_data.each_with_index do |exp, index| %>
+                    <div class="mb-3 p-3 bg-tamu-white rounded-md border-tamu-gray-300 d-flex justify-content-between align-items-start">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 font-medium"><%= exp["title"] %> at <%= exp["company"] %></p>
+                        <small class="text-tamu-gray-700"><%= exp["start_date"] %> - <%= exp["end_date"].presence || "Present" %></small>
+                        <p class="mb-0"><%= exp["description"] %></p>
+                      </div>
+                      <div class="d-flex flex-column align-items-end">
+                        <% if logged_in? && current_user == @user %>
+                          <%= link_to "Edit", edit_experience_user_path(@user, index: index), class: "tamu-btn btn-outline-maroon" %>
+
+                          <% status = verification_status_for(@user_verifications, exp["company"]) %>
+
+                          <% if status == :none %>
+                            <div class="mt-2">
+                              <%= link_to "Verify", new_company_verification_path(company_name: exp["company"]), class: "btn-outline-green fs-6 tamu-btn" %>
+                            </div>
+                          <% elsif status == :pending %>
+                            <div class="mt-2">
+                              <span class="text-warning fw-semibold fs-6">Pending</span>
+                            </div>
+                          <% elsif status == :verified %>
+                            <div class="mt-2">
+                              <span class="text-success fw-semibold fs-6">Verified ✔️</span>
+                            </div>
+                          <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <p class="text-tamu-gray-700">No experiences added yet.</p>
+                <% end %>
+              </div>
+
+              <!-- Education -->
+              <div class="mb-4 p-3 bg-tamu-white rounded-md border-tamu-gray-300">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="font-bold mb-0">Education</h5>
+                  <% if logged_in? && current_user == @user %>
+                    <%= link_to "Add Education", add_education_user_path(@user), class: "tamu-btn tamu-btn-maroon btn-sm text-decoration-none" %>
+                  <% end %>
+                </div>
+                <% if @user.educations_data.any? %>
+                  <% @user.educations_data.each_with_index do |edu, index| %>
+                    <div class="mb-3 p-3 bg-tamu-white rounded-md border-tamu-gray-300 d-flex justify-content-between align-items-start">
+                      <div class="d-flex flex-column">
+                        <p class="mb-0 font-medium"><%= edu["degree"] %> at <%= edu["school"] %></p>
+                        <small class="text-tamu-gray-700"><%= edu["start_date"] %> - <%= edu["end_date"].presence || "Present" %></small>
+                        <p class="mb-0"><%= edu["description"] %></p>
+                      </div>
+                      <% if logged_in? && current_user == @user %>
+                        <%= link_to "Edit", edit_education_user_path(@user, index: index), class: "tamu-btn btn-outline-maroon" %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <p class="text-tamu-gray-700">No education added yet.</p>
+                <% end %>
+              </div>
+
+            </div> <!-- End Main Content -->
+          </div> <!-- End Row -->
+        </div> <!-- End Card Body -->
+      </div> <!-- End Card -->
+    </div>
+  </div>
+</div>

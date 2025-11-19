@@ -31,7 +31,7 @@ class User < ApplicationRecord
                     format: { with: /\A(.+)@tamu\.edu\z/i, message: "must be a valid @tamu.edu email" }
 
   # Password validation for security
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, confirmation: true, length: { minimum: 6 }, if: :password_required?
 
   # These are optional but good to have.
   validates :first_name, presence: true, allow_blank: true
@@ -41,5 +41,10 @@ class User < ApplicationRecord
   # A simple method to get the user's full name, e.g., "Khussal Pradh"
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def password_required?
+    # Require password if it's a new record OR if password field is not blank
+    new_record? || !password.blank?
   end
 end

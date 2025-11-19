@@ -12,7 +12,7 @@ RSpec.describe "Sessions", type: :request do
 
   describe "GET /new" do
     it "renders login page" do
-      get login_path
+      get new_session_path
       expect(response).to have_http_status(200)
     end
   end

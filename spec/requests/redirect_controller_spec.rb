@@ -14,12 +14,12 @@ RSpec.describe RedirectController, type: :request do
     it "redirects logged-in users to profile" do
       login(user)
       get "/fallback"
-      expect(response).to redirect_to(profile_path)
+      expect(response).to redirect_to(user_path(user))
     end
 
     it "redirects guests to login" do
       get "/fallback"
-      expect(response).to redirect_to(login_path)
+      expect(response).to redirect_to(new_session_path)
     end
   end
 end

@@ -1,7 +1,48 @@
-<% content_for :title, "New company verification" %>
+<div class="container py-5">
+  <div class="card shadow-sm rounded-lg p-4">
 
-<h1>Company verification</h1>
+    <h2 class="text-tamu-maroon fw-bold mb-4">Verify Your Company</h2>
+    <p class="text-tamu-gray-700 mb-4">
+      Enter your <strong>company domain email</strong>. We’ll send a secure verification link to confirm your employment.
+    </p>
 
-<%= render "form", company_verification: @company_verification %>
+    <%= form_with model: @company_verification, url: company_verifications_path, local: true, data: { turbo: false } do |f| %>
 
-<br>
+      <!-- Company Name -->
+      <div class="mb-3">
+        <%= f.label :company_name, "Company Name", class: "form-label fw-semibold" %>
+        <%= f.text_field :company_name, class: "form-control", required: true, placeholder: "Ex: Google, ExxonMobil, etc.", value: @company_verification.company_name %>
+      </div>
+
+      <!-- Company Email -->
+      <div class="mb-3">
+        <%= f.label :company_email, "Company Email", class: "form-label fw-semibold" %>
+        <%= f.email_field :company_email, 
+              class: "form-control",
+              placeholder: "yourname@" + (@company_verification.company_name.blank? ? "company.com" : company_name_to_domain(@company_verification.company_name)),
+              required: true %>
+      </div>
+
+      <!-- Info Box -->
+      <div class="bg-tamu-gray-100 border border-tamu-gray-300 rounded p-3 mb-3">
+        <p class="mb-1 <%= flash[:error] ? 'text-danger' : 'text-tamu-gray-700' %>">
+          ✔ Your email domain must match the company name
+        </p>
+        <p class="text-tamu-gray-600 mb-0" style="font-size: 0.9rem;">
+          Example: If your company name is <strong><%= @company_verification.company_name.presence || "Google" %></strong>, your email should end with <code>@<%= (@company_verification.company_name.blank? ? "google.com" : company_name_to_domain(@company_verification.company_name)) %></code>.
+        </p>
+      </div>
+
+      <!-- Submit + Cancel -->
+      <div class="d-flex mt-4">
+        <%= f.submit "Send Verification Email", class: "tamu-btn tamu-btn-maroon" %>
+
+        <%= link_to "Cancel",
+              user_path(current_user),
+              class: "tamu-btn btn-outline-maroon ms-2" %>
+      </div>
+
+    <% end %>
+
+  </div>
+</div>

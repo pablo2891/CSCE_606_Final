@@ -13,14 +13,14 @@ class ApplicationController < ActionController::Base
   end
 
   def require_login
-    allowed_paths = [ login_path, new_user_path ]
+    allowed_paths = [ new_session_path, new_user_path, session_path ]
     unless logged_in? || allowed_paths.include?(request.path)
       flash[:error] = "You must be logged in to access this section"
-      redirect_to login_path
+      redirect_to new_session_path
     end
   end
 
   def redirect_if_logged_in
-    redirect_to profile_path, notice: "You are already logged in" if logged_in?
+    redirect_to user_path(current_user), notice: "You are already logged in" if logged_in?
   end
 end

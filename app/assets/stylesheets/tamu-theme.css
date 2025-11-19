@@ -1,0 +1,286 @@
+/* ---------------------------------------
+   Texas A&M Styled Utility Classes (Prefixed)
+   --------------------------------------- */
+
+/* Brand Colors */
+:root {
+  --tamu-maroon: #500000;
+  --tamu-white: #ffffff;
+
+  --tamu-dark: #3c001c;
+  --tamu-light: #732f2f;
+
+  --tamu-gray-100: #f6f6f6;
+  --tamu-gray-200: #eaeaea;
+  --tamu-gray-300: #d1d1d1;
+  --tamu-gray-400: #a7a7a7;
+  --tamu-gray-500: #707070;
+  --tamu-gray-600: #626262;
+  --tamu-gray-700: #535353;
+  --tamu-gray-800: #3e3e3e;
+  --tamu-gray-900: #202020;
+}
+
+/* -----------------------
+   Background Colors
+   ----------------------- */
+.bg-tamu-maroon     { background-color: var(--tamu-maroon); }
+.bg-tamu-white      { background-color: var(--tamu-white); }
+.bg-tamu-dark       { background-color: var(--tamu-dark); }
+.bg-tamu-light      { background-color: var(--tamu-light); }
+
+.bg-tamu-gray-100 { background-color: var(--tamu-gray-100); }
+.bg-tamu-gray-200 { background-color: var(--tamu-gray-200); }
+.bg-tamu-gray-300 { background-color: var(--tamu-gray-300); }
+.bg-tamu-gray-400 { background-color: var(--tamu-gray-400); }
+.bg-tamu-gray-500 { background-color: var(--tamu-gray-500); }
+.bg-tamu-gray-600 { background-color: var(--tamu-gray-600); }
+.bg-tamu-gray-700 { background-color: var(--tamu-gray-700); }
+.bg-tamu-gray-800 { background-color: var(--tamu-gray-800); }
+.bg-tamu-gray-900 { background-color: var(--tamu-gray-900); }
+
+/* -----------------------
+   Text Colors
+   ----------------------- */
+.text-tamu-maroon   { color: var(--tamu-maroon); }
+.text-tamu-white    { color: var(--tamu-white); }
+.text-tamu-dark     { color: var(--tamu-dark); }
+.text-tamu-light    { color: var(--tamu-light); }
+
+.text-tamu-gray-100 { color: var(--tamu-gray-100); }
+.text-tamu-gray-200 { color: var(--tamu-gray-200); }
+.text-tamu-gray-300 { color: var(--tamu-gray-300); }
+.text-tamu-gray-400 { color: var(--tamu-gray-400); }
+.text-tamu-gray-500 { color: var(--tamu-gray-500); }
+.text-tamu-gray-600 { color: var(--tamu-gray-600); }
+.text-tamu-gray-700 { color: var(--tamu-gray-700); }
+.text-tamu-gray-800 { color: var(--tamu-gray-800); }
+.text-tamu-gray-900 { color: var(--tamu-gray-900); }
+
+/* -----------------------
+   Border Colors
+   ----------------------- */
+.border-tamu-maroon   { border-color: var(--tamu-maroon); }
+.border-tamu-white    { border-color: var(--tamu-white); }
+.border-tamu-dark     { border-color: var(--tamu-dark); }
+.border-tamu-light    { border-color: var(--tamu-light); }
+
+.border-tamu-gray-100 { border-color: var(--tamu-gray-100); }
+.border-tamu-gray-200 { border-color: var(--tamu-gray-200); }
+.border-tamu-gray-300 { border-color: var(--tamu-gray-300); }
+.border-tamu-gray-400 { border-color: var(--tamu-gray-400); }
+.border-tamu-gray-500 { border-color: var(--tamu-gray-500); }
+.border-tamu-gray-600 { border-color: var(--tamu-gray-600); }
+.border-tamu-gray-700 { border-color: var(--tamu-gray-700); }
+.border-tamu-gray-800 { border-color: var(--tamu-gray-800); }
+.border-tamu-gray-900 { border-color: var(--tamu-gray-900); }
+
+/* -----------------------
+   Hover States
+   ----------------------- */
+.hover\:bg-tamu-maroon:hover  { background-color: var(--tamu-maroon); }
+.hover\:bg-tamu-dark:hover    { background-color: var(--tamu-dark); }
+.hover\:bg-tamu-light:hover   { background-color: var(--tamu-light); }
+.hover\:bg-tamu-white:hover   { background-color: var(--tamu-white); }
+
+.hover\:text-tamu-maroon:hover  { color: var(--tamu-maroon); }
+.hover\:text-tamu-dark:hover    { color: var(--tamu-dark); }
+.hover\:text-tamu-light:hover   { color: var(--tamu-light); }
+.hover\:text-tamu-white:hover   { color: var(--tamu-white); }
+
+.hover\:border-tamu-maroon:hover  { border-color: var(--tamu-maroon); }
+.hover\:border-tamu-dark:hover    { border-color: var(--tamu-dark); }
+.hover\:border-tamu-light:hover   { border-color: var(--tamu-light); }
+.hover\:border-tamu-white:hover   { border-color: var(--tamu-white); }
+
+/* -----------------------
+   Utility Helpers
+   ----------------------- */
+.rounded       { border-radius: 4px; }
+.rounded-md    { border-radius: 6px; }
+.rounded-lg    { border-radius: 10px; }
+.rounded-full  { border-radius: 9999px; }
+
+.p-2 { padding: .5rem; }
+.p-3 { padding: .75rem; }
+.p-4 { padding: 1rem; }
+
+.m-2 { margin: .5rem; }
+.m-3 { margin: .75rem; }
+.m-4 { margin: 1rem; }
+
+.border        { border-width: 1px; }
+.border-2      { border-width: 2px; }
+.border-4      { border-width: 4px; }
+
+.font-bold     { font-weight: 700; }
+.font-medium   { font-weight: 500; }
+.font-light    { font-weight: 300; }
+
+/* -----------------------
+   Button Presets
+   ----------------------- */
+.tamu-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .15s, color .15s, border-color .15s;
+  text-decoration: none;
+}
+
+.tamu-btn-maroon {
+  background: var(--tamu-maroon);
+  color: var(--tamu-white);
+}
+
+.tamu-btn-maroon:hover {
+  background: var(--tamu-dark);
+}
+
+/* Custom TAMU Bootstrap Colors */
+.btn-maroon {
+    background-color: #500000;
+    color: #ffffff;
+}
+.btn-maroon:hover {
+    background-color: #3c001c;
+    color: #ffffff;
+}
+
+.btn-outline-maroon {
+    border-color: #500000;
+    color: #500000;
+}
+
+.btn-outline-maroon:hover {
+    background-color: var(--tamu-gray-100);
+    border-color: #3c001c;
+    color: #3c001c;
+    opacity: 0.8;
+}
+
+.tamu-btn-gray {
+  font-size: 0.875em;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--tamu-gray-100);
+}
+
+.tamu-btn-gray:hover {
+  opacity:0.8;
+  background-color: var(--tamu-gray-400);
+  cursor: pointer;
+}
+
+.btn-outline-green {
+    border-color: #008000; /* green border */
+    color: #008000;        /* green text */
+}
+
+.btn-outline-green:hover {
+    background-color: var(--tamu-gray-100); /* light gray background on hover */
+    border-color: #008000;                   /* keep the green border */
+    color: #008000;                          /* keep green text */
+    opacity: 0.8;
+}
+
+
+/* Hover Opacity Helpers */
+.hover-opacity-80:hover { opacity: 0.8; }
+.hover-opacity-90:hover { opacity: 0.9; }
+
+/* ---------------------------
+   TAMU Navnbar
+   --------------------------- */
+
+.tamu-navbar {
+  background-color: var(--tamu-maroon);
+  color: var(--tamu-white);
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  min-width: 800px;
+}
+
+/* Inner container for spacing */
+.tamu-navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0;
+  height: 60px;
+}
+
+/* Brand / logo */
+.tamu-navbar-logo {
+  color: var(--tamu-white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+/* Links container */
+.tamu-navbar-links {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 100%;
+}
+
+/* Individual links */
+.tamu-navbar-links li {
+  height: 100%;
+}
+
+.tamu-navbar-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+  height: 100%;
+  color: var(--tamu-white);
+  text-decoration: none;
+  border-left: 1px solid var(--tamu-gray-300);
+  border-right: 1px solid var(--tamu-gray-300);
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.tamu-navbar-link:hover {
+  background-color: var(--tamu-dark);
+  color: var(--tamu-white);
+}
+
+.tamu-navbar-link.active {
+  background-color: var(--tamu-white);
+  color: var(--tamu-maroon);
+  font-weight: 700;
+}
+
+.tamu-navbar-links li:first-child .tamu-navbar-link {
+  border-left: none;
+}
+.tamu-navbar-links li:last-child .tamu-navbar-link {
+  border-right: none;
+}
+
+.tamu-navbar-welcome {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 100%;
+  padding: 0 1rem;
+  line-height: 60px;
+  font-weight: 700;
+}
+
+

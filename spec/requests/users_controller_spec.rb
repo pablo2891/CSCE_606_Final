@@ -14,7 +14,7 @@ RSpec.describe UsersController, type: :request do
     it "renders new" do
       # Temporarily disable require_login for this test
       allow_any_instance_of(ApplicationController).to receive(:require_login)
-      get signup_path
+      get new_user_path
       expect(response.body).to include("Sign Up")
     end
   end
@@ -33,7 +33,7 @@ RSpec.describe UsersController, type: :request do
         }
       }
       # After signup, user is redirected to profile (not login)
-      expect(response).to redirect_to(profile_path)
+      expect(response).to redirect_to(user_path(User.last))
     end
 
     it "renders new with errors" do
@@ -55,7 +55,7 @@ RSpec.describe UsersController, type: :request do
   describe "GET /profile" do
     it "assigns current_user" do
       login(user)
-      get profile_path
+      get user_path(user)
       expect(response.body).to include(user.email)
     end
   end

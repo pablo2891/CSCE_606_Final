@@ -1,0 +1,128 @@
+<div class="min-vh-100 d-flex align-items-center justify-content-center py-5 bg-tamu-gray-100">
+  <div class="w-100" style="max-width: 720px;">
+    <div class="card shadow-lg rounded-3">
+      <div class="card-body p-4">
+
+        <h1 class="text-center mb-4 text-tamu-maroon fw-bold">Edit Profile</h1>
+
+        <% if @user.errors.any? %>
+          <div class="alert alert-danger">
+            <ul class="mb-0">
+              <% @user.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= form_with model: @user, local: true, data: { turbo: false } do |f| %>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <%= f.label :first_name, class: "form-label fw-semibold" %>
+              <%= f.text_field :first_name, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <%= f.label :last_name, class: "form-label fw-semibold" %>
+              <%= f.text_field :last_name, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :email, class: "form-label fw-semibold" %>
+            <%= f.email_field :email, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, class: "form-label fw-semibold" %>
+            <%= f.password_field :password, class: "form-control", placeholder: "Leave blank to keep current password" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password_confirmation, class: "form-label fw-semibold" %>
+            <%= f.password_field :password_confirmation, class: "form-control", placeholder: "Leave blank to keep current password" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :headline, class: "form-label fw-semibold" %>
+            <%= f.text_field :headline, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :summary, class: "form-label fw-semibold" %>
+            <%= f.text_area :summary, rows: 4, class: "form-control" %>
+          </div>
+            <div class="mb-3">
+              <%= f.label :resume_url, "Resume URL", class: "form-label fw-semibold" %>
+              <%= f.url_field :resume_url, class: "form-control", placeholder: "https://example.com/resume.pdf" %>
+          </div>
+         <div class="mb-3">
+              <%= f.label :linkedin_url, "LinkedIn URL", class: "form-label fw-semibold" %>
+              <%= f.url_field :linkedin_url, class: "form-control", placeholder: "https://linkedin.com/in/username" %>
+          </div>
+          <div class="mb-3">
+              <%= f.label :github_url, "GitHub URL", class: "form-label fw-semibold" %>
+              <%= f.url_field :github_url, class: "form-control", placeholder: "https://github.com/username" %>
+          </div>
+
+          <div class="mt-5 border border-gray-100 rounded-3 px-4 pb-4 pt-2">
+            <h2 class="text-tamu-maroon fw-bold mb-3">Experience</h2>
+            <ul class="list-group mb-3">
+              <% if @user.experiences_data.any? %>
+                <% @user.experiences_data.each_with_index do |exp, index| %>
+                  <li class="list-group-item border-tamu-gray-300 d-flex justify-content-between align-items-start">
+                    <div class="d-flex flex-column">
+                      <strong><%= exp["title"] %></strong> at <%= exp["company"] %> (<%= exp["start_date"] %> - <%= exp["end_date"].presence || "Present" %>)<br>
+                      <%= exp["description"] %>
+                    </div>
+                    <% if logged_in? && current_user == @user %>
+                      <%= link_to "Edit", edit_experience_user_path(@user, index: index), class: "tamu-btn btn-outline-maroon" %>
+                    <% end %>
+                  </li>
+                <% end %>
+              <% else %>
+                  <p class="text-tamu-gray-700">No experiences added yet.</p>
+              <% end %>
+            </ul>
+            <%= link_to "Add Experience", add_experience_user_path(@user), class: "tamu-btn tamu-btn-maroon text-decoration-none me-2" %>
+          </div>
+
+          <div class="mt-5 border border-gray-100 rounded-3 px-4 pb-4 pt-2">
+            <h2 class="text-tamu-maroon fw-bold mb-3">Education</h2>
+            <ul class="list-group mb-3">
+            <% if @user.educations_data.any? %>
+              <% @user.educations_data.each_with_index do |edu, index| %>
+                  <li class="list-group-item border-tamu-gray-300 d-flex justify-content-between align-items-start">
+                    <div class="d-flex flex-column">
+                      <strong><%= edu["degree"] %></strong> at <%= edu["school"] %> (<%= edu["start_date"] %> - <%= edu["end_date"].presence || "Present" %>)<br>
+                      <%= edu["description"] %>
+                    </div>
+                    <% if logged_in? && current_user == @user %>
+                      <%= link_to "Edit", edit_education_user_path(@user, index: index), class: "tamu-btn btn-outline-maroon" %>
+                    <% end %>
+                  </li>
+                <% end %>
+            <% else %>
+                <p class="text-tamu-gray-700">No education added yet.</p>
+            <% end %>
+            </ul>
+            <%= link_to "Add Education", add_education_user_path(@user), class: "tamu-btn tamu-btn-maroon text-decoration-none" %>
+          </div>
+
+          <% if @user.is_tamu_verified %>
+            <div class="d-flex justify-content-center mb-3 mt-3">
+              <span class="badge bg-tamu-maroon text-tamu-white">TAMU Verified</span>
+            </div>
+          <% end %>
+
+          <div class="d-flex justify-content-between mt-4">
+            <%= f.submit "Save Changes", class: "tamu-btn tamu-btn-maroon" %>
+            <%= link_to "Cancel", user_path(@user), class: "tamu-btn btn-outline-maroon" %>
+          </div>
+
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

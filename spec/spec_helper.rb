@@ -3,8 +3,16 @@
 begin
   require 'simplecov'
   SimpleCov.start 'rails' do
+    command_name 'Rspec'
+    coverage_dir 'coverage/rspec'
+    add_filter '/features/'
     add_filter '/spec/'
-    coverage_dir 'coverage'
+    add_filter '/config/'
+    add_filter '/vendor/'
+    add_filter '/db/'
+    add_group 'Models', 'app/models'
+    add_group 'Controllers', 'app/controllers'
+    add_group 'Helpers', 'app/helpers'
   end
 rescue LoadError
   warn 'simplecov not available; skipping coverage'

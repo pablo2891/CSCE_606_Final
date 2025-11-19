@@ -1,49 +1,64 @@
-<h1>Sign Up</h1>
+<div class="min-vh-100 d-flex align-items-center justify-content-center py-5" style="background-color: #f6f6f6;">
+  <div class="w-100" style="max-width: 500px;">
+    <div class="card shadow-lg rounded-3">
+      <div class="card-body p-4">
+        <h1 class="card-title text-center mb-4" style="color: #500000;">Sign Up</h1>
 
-<%= form_with model: @user, local: true, data: { turbo: false } do |f| %>
-  <p>
-    <%= f.label :first_name %><br>
-    <%= f.text_field :first_name %>
-    <% if @user.errors[:first_name].any? %>
-      <div class="field-error"><%= @user.errors[:first_name].join(", ") %></div>
-    <% end %>
-  </p>
+        <%= form_with model: @user, local: true, data: { turbo: false } do |f| %>
+          
+          <div class="mb-3">
+            <%= f.label :first_name, class: "form-label" %>
+            <%= f.text_field :first_name, class: "form-control" %>
+            <% if @user.errors[:first_name].any? %>
+              <div class="text-danger small mt-1"><%= @user.errors[:first_name].join(", ") %></div>
+            <% end %>
+          </div>
 
-  <p>
-    <%= f.label :last_name %><br>
-    <%= f.text_field :last_name %>
-    <% if @user.errors[:last_name].any? %>
-      <div class="field-error"><%= @user.errors[:last_name].join(", ") %></div>
-    <% end %>
-  </p>
+          <div class="mb-3">
+            <%= f.label :last_name, class: "form-label" %>
+            <%= f.text_field :last_name, class: "form-control" %>
+            <% if @user.errors[:last_name].any? %>
+              <div class="text-danger small mt-1"><%= @user.errors[:last_name].join(", ") %></div>
+            <% end %>
+          </div>
 
-  <p>
-    <%= f.label :email %><br>
-    <%= f.email_field :email %>
-    <% if @user.errors[:email].any? %>
-      <div class="field-error"><%= @user.errors[:email].join(", ") %></div>
-    <% end %>
-  </p>
+          <div class="mb-3">
+            <%= f.label :email, class: "form-label" %>
+            <%= f.email_field :email, class: "form-control" %>
+            <% if @user.errors[:email].any? %>
+              <div class="text-danger small mt-1"><%= @user.errors[:email].join(", ") %></div>
+            <% end %>
+          </div>
 
-  <p>
-    <%= f.label :password %><br>
-    <%= f.password_field :password %>
-    <% if @user.errors[:password].any? %>
-      <div class="field-error"><%= @user.errors[:password].join(", ") %></div>
-    <% end %>
-  </p>
+          <div class="mb-3">
+            <%= f.label :password, class: "form-label" %>
+            <%= f.password_field :password, class: "form-control" %>
+            <% if @user.errors[:password].any? %>
+              <div class="text-danger small mt-1"><%= @user.errors[:password].join(", ") %></div>
+            <% end %>
+          </div>
 
-  <p>
-    <%= f.label :password_confirmation %><br>
-    <%= f.password_field :password_confirmation %>
-    <% if @user.errors[:password_confirmation].any? %>
-      <div class="field-error"><%= @user.errors[:password_confirmation].join(", ") %></div>
-    <% end %>
-  </p>
+          <div class="mb-3">
+            <%= f.label :password_confirmation, class: "form-label" %>
+            <%= f.password_field :password_confirmation, class: "form-control" %>
+            <% if @user.errors[:password_confirmation].any? %>
+              <div class="text-danger small mt-1"><%= @user.errors[:password_confirmation].join(", ") %></div>
+            <% end %>
+          </div>
 
-  <p>
-    <%= f.submit "Sign Up" %>
-  </p>
-<% end %>
+          <div class="d-grid mb-3">
+            <%= f.submit "Sign Up", class: "btn btn-maroon text-white" %>
+          </div>
 
-<%= link_to "Log in", login_path %>
+        <% end %>
+
+        <div class="d-grid">
+          <%= link_to "Login", new_session_path, class: "btn btn-outline-maroon" %>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

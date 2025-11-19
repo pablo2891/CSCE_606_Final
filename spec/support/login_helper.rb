@@ -1,7 +1,7 @@
 module LoginHelper
   # Logs in a user by posting to the SessionsController#create
   def login(user)
-    post login_path, params: { user: { email: user.email, password: "123456" } }
+    post session_path, params: { user: { email: user.email, password: "123456" } }
   end
 end
 

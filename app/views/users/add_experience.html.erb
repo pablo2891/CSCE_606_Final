@@ -1,0 +1,37 @@
+<div class="container py-5">
+  <div class="card shadow-sm rounded-lg p-4">
+    <h2 class="text-tamu-maroon fw-bold mb-4">Add Experience</h2>
+
+    <%= form_with url: create_experience_user_path(@user), scope: :experience, local: true, data: { turbo: false } do |f| %>
+      <div class="mb-3">
+        <%= f.label :title, class: "form-label fw-semibold" %>
+        <%= f.text_field :title, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :company, class: "form-label fw-semibold" %>
+        <%= f.text_field :company, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :start_date, "Start Date", class: "form-label fw-semibold" %>
+        <%= f.date_field :start_date, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :end_date, "End Date (leave blank if current)", class: "form-label fw-semibold" %>
+        <%= f.date_field :end_date, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :description, class: "form-label fw-semibold" %>
+        <%= f.text_area :description, rows: 3, class: "form-control" %>
+      </div>
+
+      <div class="d-flex mt-3">
+        <%= f.submit "Add Experience", class: "tamu-btn tamu-btn-maroon" %>
+        <%= link_to "Cancel", user_path(@user), class: "tamu-btn btn-outline-maroon ms-2" %>
+      </div>
+    <% end %>
+  </div>
+</div>

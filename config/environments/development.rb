@@ -94,14 +94,14 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true,
     open_timeout: 5,
-    read_timeout: 5
+    read_timeout: 5,
   }
 
 
   # MAILTRAP_INSECURE=1 in your shell. This will only be used in development.
-  if ENV["MAILTRAP_INSECURE"].present?
-    smtp_settings[:openssl_verify_mode] = "none"
-  end
+  # if ENV["MAILTRAP_INSECURE"].present?
+  #   smtp_settings[:openssl_verify_mode] = "none"
+  # end
 
   config.action_mailer.smtp_settings = smtp_settings
 end

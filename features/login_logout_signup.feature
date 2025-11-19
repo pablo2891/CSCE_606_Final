@@ -20,3 +20,34 @@ Feature: User Authentication
     Given I am logged in
     When I click logout
     Then I should see the homepage
+
+  Scenario: User leaves field empty in sign up
+    Given I am on the signup page
+    And I forget to fill in signup information
+    And I submit the form
+    Then I should see the signup page
+    And I should see a can't be blank signup warning
+
+  Scenario: Malicious user tries to access non-existent route
+    Given I am not logged in
+    When I visit a non-existent page
+    Then I should be redirected to the login page
+    And I should see "You must be logged in to access this section"
+  
+  Scenario: User attempts incorrect login
+    Given I am on the login page
+    When I fill in invalid login credentials
+    And I submit the form
+    Then I should see "Invalid email or password"
+
+  Scenario: Logged in user attempts to access login path
+    Given I am logged in
+    When I visit "/session/new"
+    Then I should be redirected to my profile page
+    And I should see "You are already logged in!"
+
+  Scenario: Logged in user tries to access non-existent route
+    Given I am logged in
+    When I visit a non-existent page
+    Then I should be redirected to my profile page
+    And I should see "Redirected to your profile"

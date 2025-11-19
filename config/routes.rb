@@ -1,18 +1,40 @@
 Rails.application.routes.draw do
-  resources :company_verifications, only: [ :new, :create, :show, :edit ]
-  # Signup
-  resources :users, only: [ :new, :create, :show ]
+  # Creates: POST /users (users#create), GET /users/new (users#new), GET /users/:id (users#show),
+  resources :users, only: [ :new, :create, :show, :edit, :update ] do
+    member do
+      get :add_experience
+      post :create_experience
+
+      get  "edit_experience/:index", to: "users#edit_experience", as: :edit_experience
+      patch "update_experience/:index", to: "users#update_experience", as: :update_experience
+
+      get :add_education
+      post :create_education
+
+      get  "edit_education/:index", to: "users#edit_education", as: :edit_education
+      patch "update_education/:index", to: "users#update_education", as: :update_education
+    end
+  end
+  # Creates: GET /session/new (sessions#new), POST /session (sessions#create), DELETE /session (sessions#destroy)
   resource :session, only: [ :new, :create, :destroy ]
 
+  # Company Verification GET /company_verifications/new (company_verifications#new),
+  # POST /company_verifications (company_verifications#create), GET /company_verifications/:id (company_verifications#show)
+  resources :company_verifications, only: [ :new, :create, :index, :destroy ] do
+    member do
+      get :verify   # e.g. /company_verifications/12/verify?token=xxx
+    end
+  end
+
   # Login/logout
-  get "/login", to: "sessions#new"
-  post "/login", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy"
-  get "/logout", to: "sessions#destroy"
-  get "/signup", to: "users#new"
+  # get "/login", to: "sessions#new"
+  # post "/login", to: "sessions#create"
+  # delete "/logout", to: "sessions#destroy"
+  # get "/logout", to: "sessions#destroy"
+  # get "/signup", to: "users#new"
 
   # Current user profile
-  get "/profile", to: "users#show"
+  # get "/profile", to: "users#show"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -25,7 +47,8 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "users#new"
+  root to: redirect("/users/new")
+
 
   # Test routes - only in test environment
   if Rails.env.test?

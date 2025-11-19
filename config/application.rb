@@ -21,6 +21,7 @@ rescue => e
   warn "action_mailer_preview_compat early shim failed: #{e.class}: #{e.message}"
 end
 
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

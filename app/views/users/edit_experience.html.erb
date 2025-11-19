@@ -1,0 +1,33 @@
+<div class="container py-5">
+  <div class="card shadow-sm rounded-lg p-4">
+    <h2 class="text-tamu-maroon fw-bold mb-4">Edit Experience</h2>
+
+    <%= form_with url: update_experience_user_path(@user, index: @index), scope: :experience, method: :patch, local: true do |f| %>
+      <div class="mb-3">
+        <%= f.label :title, class: "form-label fw-semibold" %>
+        <%= f.text_field :title, class: "form-control", value: @experience["title"], required: true %>
+      </div>
+      <div class="mb-3">
+        <%= f.label :company, class: "form-label fw-semibold" %>
+        <%= f.text_field :company, class: "form-control", value: @experience["company"], required: true %>
+      </div>
+      <div class="mb-3">
+        <%= f.label :start_date, class: "form-label fw-semibold" %>
+        <%= f.date_field :start_date, class: "form-control", value: @experience["start_date"], required: true %>
+      </div>
+      <div class="mb-3">
+        <%= f.label :end_date, class: "form-label fw-semibold" %>
+        <%= f.date_field :end_date, class: "form-control", value: @experience["end_date"] %>
+      </div>
+      <div class="mb-3">
+        <%= f.label :description, class: "form-label fw-semibold" %>
+        <%= f.text_area :description, rows: 3, class: "form-control", value: @experience["description"] %>
+      </div>
+
+      <div class="d-flex align-items-center pt-3">
+        <%= f.submit "Update Experience", class: "tamu-btn tamu-btn-maroon me-2" %>
+        <%= link_to "Cancel", user_path(@user), class: "tamu-btn btn-outline-maroon" %>
+      </div>
+    <% end %>
+  </div>
+</div>

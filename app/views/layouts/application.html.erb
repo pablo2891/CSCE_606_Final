@@ -18,16 +18,66 @@
     <link rel="apple-touch-icon" href="/icon.png">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tamu-theme", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-tamu-gray-100">
+    <nav class="tamu-navbar">
+      <div class="tamu-navbar-container shadow-lg">
+        <!-- Brand / Logo -->
+        <div class="tamu-navbar-brand">
+          <%= link_to "LinkedOUT", root_path, class: "tamu-navbar-logo" %>
+        </div>
+
+        <!-- Navigation Links -->
+        <ul class="tamu-navbar-links">
+          <% if logged_in? %>
+            <li class="tamu-navbar-welcome">
+              Welcome <%= current_user.full_name %>
+            </li>
+            <li>
+              <%= link_to "Profile", user_path(current_user), class: "tamu-navbar-link #{'active' if request.path.start_with?(user_path(current_user))}" %>
+            </li>
+            <li>
+              <%= link_to "Verifications", company_verifications_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(company_verifications_path)}" %>
+            </li>
+            <li>
+              <%= button_to "Logout", session_path, method: :delete, class: "tamu-navbar-link" %>
+            </li>
+          <% else %>
+            <li>
+              <%= link_to "Sign Up", new_user_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(new_user_path)}" %>
+            </li>
+            <li>
+              <%= link_to "Login", new_session_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(new_session_path)}" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </nav>
+
     <% flash.each do |key, message| %>
-      <div class="flash <%= key %>" style="padding: 10px; margin: 10px; border: 1px solid #ccc; background: #f0f0f0;">
+      <% bootstrap_class =
+          case key.to_sym
+          when :notice then "text-success border-success"
+          when :alert  then "text-danger border-danger"
+          when :error  then "text-danger border-danger"
+          else "text-secondary border-secondary"
+          end
+      %>
+
+      <div class="position-fixed top-0 start-50 translate-middle-x mt-3 
+                  bg-white border rounded-3 shadow-lg px-4 py-3 
+                  z-3 text-center <%= bootstrap_class %>" 
+          style="max-width: 450px; width: 90%;">
         <%= message %>
       </div>
     <% end %>
+
+
+
     <%= yield %>
   </body>
 </html>
