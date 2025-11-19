@@ -13,22 +13,17 @@
 
   <div>
     <%= form.label :company_email, style: "display: block" %>
-    <%= form.text_field :company_email %>
+    <%= form.text_field :company_email, required: true %>
   </div>
 
   <div>
     <%= form.label :company_name, style: "display: block" %>
-    <%= form.text_field :company_name %>
-  </div>
-
-  <div>
-    <%= form.label :is_verified, style: "display: block" %>
-    <%= form.checkbox :is_verified %>
+    <%= form.text_field :company_name, required: true %>
   </div>
 
   <div>
     <%= form.label :verification_token, style: "display: block" %>
-    <%= form.text_field :verification_token %>
+    <%= form.text_field :verification_token, required: true  %>
   </div>
 
   <div>

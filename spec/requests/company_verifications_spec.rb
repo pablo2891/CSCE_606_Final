@@ -13,30 +13,50 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/company_verifications", type: :request do
-  
   # This should return the minimal set of attributes required to create a valid
   # CompanyVerification. As you add validations to CompanyVerification, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+
+  let(:user1) {
+    User.create!(email: "john.smith@tamu.edu",
+                 first_name: "John",
+                 last_name: "Smith",
+                 password: "12346789")
   }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+  let(:user2) {
+    User.create!(email: "alice.yi@tamu.edu",
+                 first_name: "Alice",
+                 last_name: "Yi",
+                 password: "12346789")
   }
 
-  describe "GET /index" do
-    it "renders a successful response" do
-      CompanyVerification.create! valid_attributes
-      get company_verifications_url
-      expect(response).to be_successful
-    end
-  end
+  let(:user3) {
+    User.create!(email: "shawn.han@tamu.com",
+                 first_name: "Shawn",
+                 last_name: "Han",
+                 password: "123456789")
+  }
+
+  let(:verification1) {
+    CompanyVerification.create!(
+      user_id: user1.id,
+      company_email: "john.smith@company.com",
+      company_name:  "Example Company",
+    )
+  }
+
+  let(:verification2) {
+    CompanyVerification.create!(
+      user_id: user2.id,
+      company_email: "alice.yi@company.com",
+      company_name:  "Example Company",
+    )
+  }
 
   describe "GET /show" do
     it "renders a successful response" do
-      company_verification = CompanyVerification.create! valid_attributes
-      get company_verification_url(company_verification)
+      get company_verification_url(verification1)
       expect(response).to be_successful
     end
   end
@@ -50,23 +70,25 @@ RSpec.describe "/company_verifications", type: :request do
 
   describe "GET /edit" do
     it "renders a successful response" do
-      company_verification = CompanyVerification.create! valid_attributes
-      get edit_company_verification_url(company_verification)
+      get edit_company_verification_url(verification1)
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
     context "with valid parameters" do
-      it "creates a new CompanyVerification" do
+      it "creates a new CompanyVerification and redirects to show page" do
+        session[:user_id] = user3.id
         expect {
-          post company_verifications_url, params: { company_verification: valid_attributes }
+          post company_verifications_url, params: { company_email: "shawn.han@example.com", company_name: "Example Company"  }
         }.to change(CompanyVerification, :count).by(1)
+        expect(response).to redirect_to(company_verification_url(CompanyVerification.last))
       end
 
-      it "redirects to the created company_verification" do
-        post company_verifications_url, params: { company_verification: valid_attributes }
-        expect(response).to redirect_to(company_verification_url(CompanyVerification.last))
+      it "creates a new token that is not a repeat" do
+        session[:user_id] = user3.id
+        company_verification = CompanyVerification.find_by(user_id: session[:user_id])
+        expect(company_verification.unique?(verification_token: company_verification.verification_token)).to eq(true)
       end
     end
 
@@ -76,56 +98,6 @@ RSpec.describe "/company_verifications", type: :request do
           post company_verifications_url, params: { company_verification: invalid_attributes }
         }.to change(CompanyVerification, :count).by(0)
       end
-
-      it "renders a successful response (i.e. to display the 'new' template)" do
-        post company_verifications_url, params: { company_verification: invalid_attributes }
-        expect(response).to be_successful
-      end
-    end
-  end
-
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested company_verification" do
-        company_verification = CompanyVerification.create! valid_attributes
-        patch company_verification_url(company_verification), params: { company_verification: new_attributes }
-        company_verification.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the company_verification" do
-        company_verification = CompanyVerification.create! valid_attributes
-        patch company_verification_url(company_verification), params: { company_verification: new_attributes }
-        company_verification.reload
-        expect(response).to redirect_to(company_verification_url(company_verification))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "renders a successful response (i.e. to display the 'edit' template)" do
-        company_verification = CompanyVerification.create! valid_attributes
-        patch company_verification_url(company_verification), params: { company_verification: invalid_attributes }
-        expect(response).to be_successful
-      end
-    end
-  end
-
-  describe "DELETE /destroy" do
-    it "destroys the requested company_verification" do
-      company_verification = CompanyVerification.create! valid_attributes
-      expect {
-        delete company_verification_url(company_verification)
-      }.to change(CompanyVerification, :count).by(-1)
-    end
-
-    it "redirects to the company_verifications list" do
-      company_verification = CompanyVerification.create! valid_attributes
-      delete company_verification_url(company_verification)
-      expect(response).to redirect_to(company_verifications_url)
     end
   end
 end
