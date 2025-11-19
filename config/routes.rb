@@ -1,17 +1,18 @@
 Rails.application.routes.draw do
-  # Signup
+  # Creates: POST /users (users#create), GET /users/new (users#new), GET /users/:id (users#show), 
   resources :users, only: [ :new, :create, :show ]
+  # Creates: GET /session/new (sessions#new), POST /session (sessions#create), DELETE /session (sessions#destroy)
   resource :session, only: [ :new, :create, :destroy ]
 
   # Login/logout
-  get "/login", to: "sessions#new"
-  post "/login", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy"
-  get "/logout", to: "sessions#destroy"
-  get "/signup", to: "users#new"
+  # get "/login", to: "sessions#new"
+  # post "/login", to: "sessions#create"
+  # delete "/logout", to: "sessions#destroy"
+  # get "/logout", to: "sessions#destroy"
+  # get "/signup", to: "users#new"
 
   # Current user profile
-  get "/profile", to: "users#show"
+  # get "/profile", to: "users#show"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -24,7 +25,8 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "users#new"
+  root to: redirect("/users/new")
+
 
   # Test routes - only in test environment
   if Rails.env.test?

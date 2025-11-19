@@ -5,24 +5,24 @@
 
         <h1 class="text-center mb-4 text-maroon fw-bold">Login</h1>
 
-        <%= form_with url: login_path, local: true do %>
+        <%= form_with model: @user, url: session_path, local: true, data: { turbo: false } do |f| %>
 
           <div class="mb-3">
-            <%= label_tag :email, "Email", class: "form-label fw-semibold" %>
-            <%= email_field_tag :email, nil, required: true, class: "form-control" %>
+            <%= f.label :email, class: "form-label fw-semibold" %>
+            <%= f.email_field :email, required: true, class: "form-control" %>
           </div>
 
-          <div class="mb-3">
-            <%= label_tag :password, "Password", class: "form-label fw-semibold" %>
-            <%= password_field_tag :password, nil, required: true, class: "form-control" %>
+          <div>
+            <%= f.label :password, class: "form-label fw-semibold" %>
+            <%= f.password_field :password, required: true, class: "form-control" %>
           </div>
 
-          <% if @login_error %>
-            <div class="text-danger text-center small mb-2"><%= @login_error %></div>
+          <% if flash[:error] %>
+            <div class="text-danger text-center small mb-2"><%= flash[:error] %></div>
           <% end %>
 
-          <div class="d-grid mb-2">
-            <%= submit_tag "Login", class: "btn btn-maroon" %>
+          <div class="d-grid mt-3 mb-3">
+            <%= f.submit "Login", class: "btn btn-maroon" %>
           </div>
 
         <% end %>
