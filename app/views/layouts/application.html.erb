@@ -23,7 +23,55 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
+  <body class="bg-tamu-gray-100">
+    <nav class="navbar navbar-expand-lg bg-tamu-maroon text-tamu-white p-3">
+      <div class="container-fluid">
+
+        <!-- Brand / Logo -->
+        <a class="navbar-brand text-tamu-white fw-bold" href="<%= root_path %>">
+          LinkedOut
+        </a>
+
+        <!-- Hamburger menu for mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar content -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+
+            <% if logged_in? %>
+              <!-- Show Welcome message -->
+              <li class="nav-item me-3">
+                <span class="nav-link text-tamu-white fw-semibold">
+                  Welcome, <%= current_user.first_name %>
+                </span>
+              </li>
+
+              <!-- Profile link with active indicator -->
+              <li class="nav-item me-2">
+                <%= link_to "Profile", user_path(current_user), class: "navbar-btn-light #{'active' if current_page?(user_path(current_user))}" %>
+              </li>
+
+              <!-- Logout button -->
+              <li class="nav-item">
+                <%= button_to "Log Out", session_path, method: :delete, class: "navbar-btn-light" %>
+              </li>
+            <% else %>
+              <!-- Login button -->
+              <li class="nav-item">
+                <%= link_to "Sign Up", new_user_path, class: "navbar-btn-light #{'active' if current_page?(new_user_path)}" %>
+              </li>
+              <li class="nav-item">
+                <%= link_to "Login", new_session_path, class: "navbar-btn-light #{'active' if current_page?(new_session_path)}" %>
+              </li>
+            <% end %>
+
+          </ul>
+        </div>
+      </div>
+    </nav>
     <% flash.each do |key, message| %>
       <% bootstrap_class =
           case key.to_sym
