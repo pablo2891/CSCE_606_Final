@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :company_verifications, only: [ :new, :create, :show ]
+  resources :company_verifications, only: [ :new, :create, :show, :edit ]
   # Signup
   resources :users, only: [ :new, :create, :show ]
   resource :session, only: [ :new, :create, :destroy ]
