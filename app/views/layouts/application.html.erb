@@ -23,7 +23,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-tamu-gray-100">
+  <body class="bg-tamu-gray-100 shadow-lg">
     <nav class="tamu-navbar">
       <div class="tamu-navbar-container">
         <!-- Brand / Logo -->
@@ -44,11 +44,14 @@
               <%= link_to "Verifications", company_verifications_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(company_verifications_path)}" %>
             </li>
             <li>
-              <%= link_to "Logout", session_path, method: :delete, class: "tamu-navbar-link" %>
+              <%= button_to "Logout", session_path, method: :delete, class: "tamu-navbar-link" %>
             </li>
           <% else %>
             <li>
-              <%= link_to "Login", new_session_path, class: "tamu-navbar-link" %>
+              <%= link_to "Sign Up", new_user_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(new_user_path)}" %>
+            </li>
+            <li>
+              <%= link_to "Login", new_session_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(new_session_path)}" %>
             </li>
           <% end %>
         </ul>

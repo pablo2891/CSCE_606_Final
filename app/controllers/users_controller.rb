@@ -24,6 +24,9 @@ class UsersController < ApplicationController
 
     @user_verifications = current_user.company_verifications.index_by { |cv| cv.company_name.downcase.strip }
     @verified_companies = current_user.company_verifications.where(is_verified: true)
+
+    rescue ActiveRecord::RecordNotFound
+  redirect_to user_path(current_user), alert: "User not found."
   end
 
   def edit
