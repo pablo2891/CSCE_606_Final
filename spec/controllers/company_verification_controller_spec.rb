@@ -18,13 +18,6 @@ RSpec.describe CompanyVerificationsController, type: :controller do
   end
 
   let!(:user2) do
-    User.create!(email: "alice.yi@tamu.edu",
-                 first_name: "Alice",
-                 last_name: "Yi",
-                 password: "12346789")
-  end
-
-  let!(:user3) do
     User.create!(email: "shawn.han@tamu.edu",
                  first_name: "Shawn",
                  last_name: "Han",
@@ -34,44 +27,81 @@ RSpec.describe CompanyVerificationsController, type: :controller do
   let!(:verification1) do
     CompanyVerification.create!(
       user_id: user1.id,
-      company_email: "john.smith@company.com",
-      company_name:  "Example Company",
+      company_email: "john.smith@meta.com",
+      company_name:  "Meta",
+      is_verified: true
     )
   end
 
   let!(:verification2) do
     CompanyVerification.create!(
-      user_id: user2.id,
-      company_email: "alice.yi@company.com",
-      company_name:  "Example Company",
+      user_id: user1.id,
+      company_email: "john.smith@amazon.com",
+      company_name:  "Amazon"
     )
   end
 
-  describe "show" do
-    it "company verification 1 with John Smith" do
+  describe "index" do
+    it "company verification index for user John Smith pending" do
       session[:user_id] = user1.id
-      get :show, params: { id: verification1.id }
-      # TODO: Write an expect statement to check
-      expect(response).to have_http_status(:ok)
-      expect(response).to render_template(:show)
-      expect(assigns(:company_verification)).to eq(verification1)
+      get :index
+      expect(assigns(:pending_verifications)).to include(verification2)
+    end
+
+    it "company verification index for user John Smith verified" do
+      session[:user_id] = user1.id
+      get :index
+      expect(assigns(:verified_verifications)).to include(verification1)
     end
   end
 
   describe "new" do
     it "company verification with Shawn Han" do
-      session[:user_id] = user3.id
+      session[:user_id] = user2.id
       get :new
-      verification = CompanyVerification.find_by(user_id: session[:user_id])
-      expect(assigns(:company_verification)).to eq(verification)
+      expect(assigns(:company_verification)).to be_a_new(CompanyVerification)
     end
   end
 
-  # describe "edit" do
-  #   it "company verification edit with Shawn Han" do
-  #     session[:user_id] = user3.id
-  #     get :edit
-  #     expect(assigns(:company_verification)).to be_
-  #   end
-  # end
+  describe "create" do
+    before do
+      session[:user_id] = user2.id
+      @current_user = User.find(session[:user_id])
+    end
+    it "creates a valid verification entry" do
+      get :create, params: { company_verification: { company_name: "Apple", company_email: "shawn.han@apple.com" } }
+      expect(@current_user.company_verifications.exists?(company_name: "Apple")).to eq(true)
+    end
+
+    it "prevents ain invalid verification entry with mismatching company names" do
+      get :create, params: { company_verification: { company_name: "Apple", company_email: "shawn.han@meta.com" } }
+      expect(flash[:error]).to eq("Your email domain must match the company name.")
+    end
+  end
+
+  describe "verify" do
+    before do
+      session[:user_id] = user1.id
+    end
+    it "fails if the token is incorrect" do
+      get :verify, params: { id: verification2.id, token: "incorrect_token" }
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "passes if the token is incorrect" do
+      get :verify, params: { id: verification2.id, token: verification2.verification_token }
+      expect(response).to redirect_to(company_verifications_path)
+    end
+  end
+
+  describe "destroy" do
+    before do
+      session[:user_id] = user1.id
+    end
+    it "deletes an entry in company verification" do
+      deleted_id = verification2.id
+      get :destroy, params: { id: deleted_id }
+      expect(CompanyVerification.exists?(id: deleted_id)).to eq(false)
+    end
+  end
 end

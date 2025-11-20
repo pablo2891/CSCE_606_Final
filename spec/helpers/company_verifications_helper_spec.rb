@@ -11,5 +11,9 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe CompanyVerificationsHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "check function" do
+    it "strips company email to .com domain" do
+      expect(company_name_to_domain("apple")).to eq("apple.com")
+    end
+  end
 end

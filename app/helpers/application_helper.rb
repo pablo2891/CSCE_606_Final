@@ -1,6 +1,6 @@
 module ApplicationHelper
   def company_match?(company_name_1, company_name_2)
-    normalize = ->(s) { s.to_s.downcase.gsub(/\s+/, '') }
+    normalize = ->(s) { s.to_s.downcase.gsub(/\s+/, "") }
     normalize.call(company_name_1) == normalize.call(company_name_2)
   end
 
