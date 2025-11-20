@@ -128,3 +128,6 @@ end
 Then("I should be redirected to my profile page") do
   expect(page.current_path).to eq(user_path(@user))
 end
+Then("I should not see {string}") do |content|
+  expect(page).not_to have_content(content)
+end

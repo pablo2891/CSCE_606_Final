@@ -1,18 +1,18 @@
 Rails.application.routes.draw do
-  # Creates: POST /users (users#create), GET /users/new (users#new), GET /users/:id (users#show), 
+  # Creates: POST /users (users#create), GET /users/new (users#new), GET /users/:id (users#show),
   resources :users, only: [ :new, :create, :show, :edit, :update ] do
     member do
       get :add_experience
       post :create_experience
 
-      get  'edit_experience/:index', to: 'users#edit_experience', as: :edit_experience
-      patch 'update_experience/:index', to: 'users#update_experience', as: :update_experience
+      get  "edit_experience/:index", to: "users#edit_experience", as: :edit_experience
+      patch "update_experience/:index", to: "users#update_experience", as: :update_experience
 
       get :add_education
       post :create_education
 
-      get  'edit_education/:index', to: 'users#edit_education', as: :edit_education
-      patch 'update_education/:index', to: 'users#update_education', as: :update_education
+      get  "edit_education/:index", to: "users#edit_education", as: :edit_education
+      patch "update_education/:index", to: "users#update_education", as: :update_education
     end
   end
   # Creates: GET /session/new (sessions#new), POST /session (sessions#create), DELETE /session (sessions#destroy)
@@ -20,10 +20,14 @@ Rails.application.routes.draw do
 
   # Company Verification GET /company_verifications/new (company_verifications#new),
   # POST /company_verifications (company_verifications#create), GET /company_verifications/:id (company_verifications#show)
-  resources :company_verifications, only: [:new, :create, :index, :destroy] do
+  resources :company_verifications, only: [ :new, :create, :index, :destroy ] do
     member do
       get :verify   # e.g. /company_verifications/12/verify?token=xxx
     end
+  end
+
+  resources :referral_posts do
+    resources :referral_requests, only: [ :create ]
   end
 
   # Login/logout
@@ -49,6 +53,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root to: redirect("/users/new")
 
+
+
+  # Email Verification Routes
+  get "/verify_tamu", to: "email_verifications#verify_tamu"
+  get "/verify_company", to: "email_verifications#verify_company"
 
   # Test routes - only in test environment
   if Rails.env.test?

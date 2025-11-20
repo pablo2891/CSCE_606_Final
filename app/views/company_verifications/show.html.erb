@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @company_verification %>
+
+<div>
+  <%= link_to "Edit this company verification", edit_company_verification_path(@company_verification) %> |
+  <%= link_to "Back to company verifications", company_verifications_path %>
+
+  <%= button_to "Destroy this company verification", @company_verification, method: :delete %>
+</div>

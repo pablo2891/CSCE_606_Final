@@ -2,7 +2,6 @@ class CompanyVerificationsController < ApplicationController
   def new
     @company_verification = CompanyVerification.new
     @company_verification.company_name = params[:company_name] if params[:company_name].present?
-
   end
 
   def create
@@ -14,20 +13,22 @@ class CompanyVerificationsController < ApplicationController
     end
 
     if @company_verification.save
-        # flash[:error] = "Cannot send verification email at this time. Please try again later."
-        # redirect_to user_path(current_user) and return
-    #   CompanyVerificationMailer.verify_email(@company_verification).deliver_later
+      CompanyMailer.with(verification: @company_verification).company_verification_email.deliver_later
+      # flash[:error] = "Cannot send verification email at this time. Please try again later."
+      # redirect_to user_path(current_user) and return
+      #   CompanyVerificationMailer.verify_email(@company_verification).deliver_later
 
-        ### SEND EMAIL HERE + REDIRECT ###
-        redirect_to company_verifications_path, notice: "A verification email has been sent to your company email."
+      ### SEND EMAIL HERE + REDIRECT ###
+      redirect_to company_verifications_path, notice: "A verification email has been sent to your company email."
     else
-      puts @company_verification.errors.full_messages
+      # puts @company_verification.errors.full_messages
       flash[:error] = "Failed to create company verification."
       redirect_to user_path(current_user) and return
     end
   end
 
   def verify
+    # localhost:3000/company_verifications/<id>/verify?id=<>&token=<>
     verification = CompanyVerification.find(params[:id])
 
     if verification.verification_token == params[:token]
