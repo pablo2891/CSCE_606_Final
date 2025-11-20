@@ -66,17 +66,17 @@ end
 Then("I should see the experience form") do
   # Check for the heading
   expect(page).to have_content("Add Experience")
-  
+
   # Check for all the form fields
   expect(page).to have_field("Title")
   expect(page).to have_field("Company")
   expect(page).to have_field("Start Date")
   expect(page).to have_field("End Date (leave blank if current)")
   expect(page).to have_field("Description")
-  
+
   # Check for the submit button
   expect(page).to have_button("Add Experience")
-  
+
   # Optional: check for Cancel link
   expect(page).to have_link("Cancel")
 end

@@ -110,10 +110,6 @@ When("I visit the profile page of any user") do
     password: "password123",
     password_confirmation: "password123"
   )
-  
-  visit user_path(other_user) 
+
+  visit user_path(other_user)
 end
-
-
-
-

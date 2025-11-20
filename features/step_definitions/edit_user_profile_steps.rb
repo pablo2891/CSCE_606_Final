@@ -34,4 +34,3 @@ Then("I should be redirected to the profile page for {string} {string}") do |fir
   user = User.find_by(first_name: first, last_name: last)
   expect(page).to have_current_path(user_path(user))
 end
-
