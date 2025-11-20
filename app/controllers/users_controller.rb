@@ -25,8 +25,8 @@ class UsersController < ApplicationController
     @user_verifications = current_user.company_verifications.index_by { |cv| cv.company_name.downcase.strip }
     @verified_companies = current_user.company_verifications.where(is_verified: true)
 
-    rescue ActiveRecord::RecordNotFound
-  redirect_to user_path(current_user), alert: "User not found."
+  rescue ActiveRecord::RecordNotFound
+    redirect_to user_path(current_user), alert: "User not found."
   end
 
   def edit
@@ -57,6 +57,13 @@ class UsersController < ApplicationController
     redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
 
     exp = params.require(:experience).permit(:title, :company, :start_date, :end_date, :description).to_h
+
+    if exp["title"].blank? || exp["company"].blank? || exp["start_date"].blank?
+      flash.now[:error] = "Failed to add experience."
+      render :add_experience
+      return
+    end
+
     @user.experiences_data << exp
     if @user.save
       redirect_to user_path(@user), notice: "Experience added!"
@@ -98,6 +105,14 @@ class UsersController < ApplicationController
     redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
 
     edu = params.require(:education).permit(:degree, :school, :start_date, :end_date, :description).to_h
+
+    # Require degree and school for now; start_date is optional in the UI/tests
+    if edu["degree"].blank? || edu["school"].blank?
+      flash.now[:error] = "Failed to add education."
+      render :add_education
+      return
+    end
+
     @user.educations_data << edu
     if @user.save
       redirect_to user_path(@user), notice: "Education added!"

@@ -1,0 +1,19 @@
+<div class="container py-5">
+  <div class="card shadow-sm rounded-lg p-4">
+    <h2 class="text-tamu-maroon fw-bold mb-4">Create Referral Post</h2>
+
+    <%= form_with model: @referral_post, local: true do |f| %>
+      <div class="mb-3">
+        <%= f.label :title, "Title", class: "form-label fw-semibold" %>
+        <%= f.text_field :title, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :company_name, "Company", class: "form-label fw-semibold" %>
+        <%= f.select :company_name, current_user.company_verifications.where(is_verified: true).pluck(:company_name), { prompt: "Select a company" }, { class: "form-select", required: true } %>
+      </div>
+
+      <%= f.submit "Create Referral Post", class: "tamu-btn tamu-btn-maroon" %>
+    <% end %>
+  </div>
+</div>

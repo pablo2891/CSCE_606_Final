@@ -26,6 +26,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :referral_posts do
+    resources :referral_requests, only: [ :create ]
+  end
+
   # Login/logout
   # get "/login", to: "sessions#new"
   # post "/login", to: "sessions#create"
@@ -49,6 +53,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root to: redirect("/users/new")
 
+
+
+  # Email Verification Routes
+  get "/verify_tamu", to: "email_verifications#verify_tamu"
+  get "/verify_company", to: "email_verifications#verify_company"
 
   # Test routes - only in test environment
   if Rails.env.test?
