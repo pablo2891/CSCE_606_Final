@@ -85,13 +85,13 @@
                       </div>
                       <div class="d-flex flex-column align-items-end">
                         <% if logged_in? && current_user == @user %>
-                          <%= link_to "Edit", edit_experience_user_path(@user, index: index), class: "tamu-btn btn-outline-maroon" %>
+                          <%= link_to "Edit", edit_experience_user_path(@user, index: index), class: "tamu-btn btn-outline-maroon text-decoration-underline" %>
 
                           <% status = verification_status_for(@user_verifications, exp["company"]) %>
 
                           <% if status == :none %>
                             <div class="mt-2">
-                              <%= link_to "Verify", new_company_verification_path(company_name: exp["company"]), class: "btn-outline-green fs-6 tamu-btn" %>
+                              <%= link_to "Verify", new_company_verification_path(company_name: exp["company"]), class: "btn-outline-green fs-6 tamu-btn text-decoration-underline" %>
                             </div>
                           <% elsif status == :pending %>
                             <div class="mt-2">

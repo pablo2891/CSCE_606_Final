@@ -44,7 +44,7 @@
               <%= link_to "Verifications", company_verifications_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(company_verifications_path)}" %>
             </li>
             <li>
-              <%= button_to "Logout", session_path, method: :delete, class: "tamu-navbar-link" %>
+              <%= button_to "Logout", session_path, method: :delete, class: "tamu-navbar-link text-center fw-bold px-4", style: "background:none; border:none; padding:0; cursor:pointer; align-text: center; line-height: 60px;" %>
             </li>
           <% else %>
             <li>
