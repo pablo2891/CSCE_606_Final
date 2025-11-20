@@ -13,6 +13,7 @@ class CompanyVerificationsController < ApplicationController
     end
 
     if @company_verification.save
+      CompanyMailer.with(verification: @company_verification).company_verification_email.deliver_later
       # flash[:error] = "Cannot send verification email at this time. Please try again later."
       # redirect_to user_path(current_user) and return
       #   CompanyVerificationMailer.verify_email(@company_verification).deliver_later
