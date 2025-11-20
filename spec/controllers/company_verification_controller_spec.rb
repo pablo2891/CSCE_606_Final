@@ -77,6 +77,12 @@ RSpec.describe CompanyVerificationsController, type: :controller do
       get :create, params: { company_verification: { company_name: "Apple", company_email: "shawn.han@meta.com" } }
       expect(flash[:error]).to eq("Your email domain must match the company name.")
     end
+
+    it "prevents ain invalid verification entry with bad input" do
+      get :create, params: { company_verification: { company_name: "Apple", company_email: "@apple.com" } }
+      expect(flash[:error]).to eq("Failed to create company verification.")
+      expect(response).to redirect_to(user_path(@current_user))
+    end
   end
 
   describe "verify" do

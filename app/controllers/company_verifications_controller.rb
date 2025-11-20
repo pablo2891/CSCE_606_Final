@@ -20,7 +20,7 @@ class CompanyVerificationsController < ApplicationController
       ### SEND EMAIL HERE + REDIRECT ###
       redirect_to company_verifications_path, notice: "A verification email has been sent to your company email."
     else
-      puts @company_verification.errors.full_messages
+      # puts @company_verification.errors.full_messages
       flash[:error] = "Failed to create company verification."
       redirect_to user_path(current_user) and return
     end
