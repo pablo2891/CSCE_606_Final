@@ -40,6 +40,7 @@ Given("there is a referral post for {string}") do |company_name|
     user: other_user,
     company_verification: cv,
     title: "Job at #{company_name}",
+    job_title: "Software Engineer",
     company_name: company_name,
     status: :active
   )
@@ -60,4 +61,18 @@ When("I force a duplicate referral request") do
   page.driver.post referral_post_referral_requests_path(post)
   # Follow redirect
   visit referral_posts_path
+end
+
+Then('I should be redirected to the created referral post') do
+  # Check that we're on a referral post show page (path like /referral_posts/:id)
+  expect(page.current_path).to match(/\/referral_posts\/\d+/)
+  # Also verify we see the success message
+  expect(page).to have_content("Referral post created!")
+end
+
+Then('I should see the referral request status as {string}') do |status|
+  request = ReferralRequest.find_by(user: @user)
+  expect(request).to be_present
+  expect(request.status).to eq(status.downcase)
+  visit dashboard_path
 end

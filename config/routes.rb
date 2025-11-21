@@ -55,18 +55,18 @@ Rails.application.routes.draw do
   root to: redirect("/users/new")
 
   resources :referral_posts do
-    resources :referral_requests, only: [:create] do
+    resources :referral_requests, only: [ :create ] do
       collection do
-        post 'from_message', to: 'referral_requests#create_from_message'
+        post "from_message", to: "referral_requests#create_from_message"
       end
     end
   end
 
   # route to update request status (used by post owner)
-  patch 'referral_requests/:id/status', to: 'referral_requests#update_status', as: 'update_referral_request_status'
+  patch "referral_requests/:id/status", to: "referral_requests#update_status", as: "update_referral_request_status"
 
   # Dashboard for owners to see incoming requests
-  get 'dashboard', to: 'dashboard#index', as: 'dashboard'
+  get "dashboard", to: "dashboard#index", as: "dashboard"
 
   # Email Verification Routes
   get "/verify_tamu", to: "email_verifications#verify_tamu"

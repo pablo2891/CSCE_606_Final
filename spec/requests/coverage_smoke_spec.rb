@@ -77,7 +77,7 @@ RSpec.describe 'Coverage smoke', type: :request do
     get new_referral_post_path
     expect(response.status).to be_between(200, 302).inclusive
     user.company_verifications.create!(company_name: 'Gamma', company_email: 'me@gamma.com', is_verified: true, verification_token: 'v2')
-    post referral_posts_path, params: { referral_post: { title: 'Internship', company_name: 'Gamma' } }
+    post referral_posts_path, params: { referral_post: { title: 'Internship', job_title: 'Intern', company_name: 'Gamma' } }
     expect(response.status).to be_between(200, 302).inclusive
     rp = user.referral_posts.first
     if rp

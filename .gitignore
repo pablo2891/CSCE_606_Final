@@ -36,7 +36,9 @@
 # SimpleCov coverage report
 coverage/
 
-
+# Ignore database.yml and seeds.rb which may contain sensitive information
+/config/database.yml
+/db/seeds.rb
 
 # Ignore encrypted per-environment credentials in development
 /config/credentials/

@@ -75,10 +75,10 @@ class ReferralRequestsController < ApplicationController
     if raw.is_a?(String)
       begin
         parsed = JSON.parse(raw)
-        return parsed.is_a?(Hash) ? parsed : { answers: parsed }
+        parsed.is_a?(Hash) ? parsed : { answers: parsed }
       rescue JSON::ParserError
         # treat as single answer string
-        return { "answer" => raw }
+        { "answer" => raw }
       end
     elsif raw.is_a?(ActionController::Parameters) || raw.is_a?(Hash)
       raw.to_unsafe_h
