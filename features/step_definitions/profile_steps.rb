@@ -3,7 +3,11 @@ Given("I am on my profile page") do
 end
 
 When("I click {string}") do |button_text|
-  click_link_or_button button_text
+  if page.has_button?(button_text)
+    click_button button_text
+  else
+    click_link button_text
+  end
 end
 
 When("I fill in {string} with {string}") do |field, value|
