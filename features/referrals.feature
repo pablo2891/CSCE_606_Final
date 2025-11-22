@@ -19,7 +19,7 @@ Scenario: User creates a referral post successfully
 
 Scenario: User requests a referral successfully
   Given there is a referral post for "Tech Corp"
-  And I am on the referral posts page
+  And I am viewing referral posts as a different user
   When I click "Request Referral"
   Then I should see "Request sent!"
   And I should see the referral request status as "Pending"

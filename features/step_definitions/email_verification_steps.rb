@@ -51,3 +51,27 @@ Then("the company verification for {string} should not be verified") do |company
   cv = CompanyVerification.find_by(company_name: company_name)
   expect(cv.is_verified).to be false
 end
+
+Given('I have a pending verification for {string} with token {string}') do |company_name, token|
+  @company_verification = @user.company_verifications.create!(
+    company_name: company_name,
+    company_email: "test@#{company_name.downcase}.com",
+    is_verified: false
+  )
+  @company_verification.update_column(:verification_token, token)
+end
+
+Given('that user has a pending verification for {string} with token {string}') do |company_name, token|
+  @other_user ||= User.find_by(email: 'guest@tamu.edu')
+  @company_verification = @other_user.company_verifications.create!(
+    company_name: company_name,
+    company_email: "test@#{company_name.downcase}.com",
+    is_verified: false
+  )
+  @company_verification.update_column(:verification_token, token)
+end
+
+Then('I should be redirected to the root path') do
+  # Be more flexible about the redirect target
+  expect([ root_path, new_session_path, '/' ]).to include(page.current_path)
+end

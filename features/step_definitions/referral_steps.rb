@@ -20,24 +20,18 @@ Then("I should be redirected to the referral posts page") do
 end
 
 Given("there is a referral post for {string}") do |company_name|
-  # We need another user to be the poster, or the current user.
-  # If current user posts, they can't request their own?
-  # Let's check the model/controller logic. Usually you request from others.
-  # Let's create another user and a post.
-  other_user = User.create!(
-    first_name: "Other",
-    last_name: "Person",
-    email: "other@tamu.edu",
-    password: "password",
-    password_confirmation: "password"
-  )
-  cv = other_user.company_verifications.create!(
-    company_name: company_name,
-    company_email: "recruiter@#{company_name.downcase.gsub(/\s+/, "")}.com",
-    is_verified: true
-  )
+  # Create a post for the CURRENT user so they can receive requests
+  cv = @user.company_verifications.find_by(company_name: company_name)
+  if cv.nil?
+    cv = @user.company_verifications.create!(
+      company_name: company_name,
+      company_email: "recruiter@#{company_name.downcase.gsub(/\s+/, "")}.com",
+      is_verified: true
+    )
+  end
+
   ReferralPost.create!(
-    user: other_user,
+    user: @user,
     company_verification: cv,
     title: "Job at #{company_name}",
     job_title: "Software Engineer",
@@ -75,4 +69,21 @@ Then('I should see the referral request status as {string}') do |status|
   expect(request).to be_present
   expect(request.status).to eq(status.downcase)
   visit dashboard_path
+end
+
+Given("I am viewing referral posts as a different user") do
+  first_name, last_name = "Jane", "Doe"
+
+  @user = User.find_or_create_by!(first_name: first_name, last_name: last_name) do |u|
+    u.email = "#{first_name.downcase}.#{last_name.downcase}@tamu.edu"
+    u.password = "password"
+    u.password_confirmation = "password"
+  end
+
+  # Direct login via session
+  page.set_rack_session(user_id: @user.id)
+
+  # Visit referral posts page
+  visit referral_posts_path
+  expect(page).to have_current_path(referral_posts_path)
 end

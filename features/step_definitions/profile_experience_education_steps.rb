@@ -1,17 +1,23 @@
-# features/step_definitions/user_experiences_steps.rb
-
-# Log in as a user
 Given("I am logged in as {string}") do |full_name|
   first_name, last_name = full_name.split(" ")
-  @user = User.find_or_create_by!(first_name: first_name, last_name: last_name, email: "#{first_name.downcase}@example.com") do |u|
+  @user = User.find_or_create_by!(first_name: first_name, last_name: last_name, email: "#{first_name.downcase}@tamu.edu") do |u|
     u.password = "password"
     u.password_confirmation = "password"
   end
 
-  visit login_path
-  fill_in "Email", with: @user.email
-  fill_in "Password", with: "password"
-  click_button "Log in"
+  # Log out first
+  visit '/session'
+  page.driver.submit :delete, '/session', {}
+
+  # Login as new user
+  visit new_session_path
+
+  # Fill form with correct field identifiers
+  fill_in 'user[email]', with: @user.email
+  fill_in 'user[password]', with: 'password'
+  click_button 'Login'
+
+  expect(page).to have_content(@user.first_name)
 end
 
 # Add an experience manually

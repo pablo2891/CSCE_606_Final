@@ -18,6 +18,11 @@ end
 require 'cucumber/rails'
 require 'capybara/rails'
 
+# Enable rack_session_access for direct session manipulation
+if Rails.env.test?
+  require 'rack_session_access/capybara'
+end
+
 # Ensure transactional fixtures for cucumber
 World(ActiveRecord::TestFixtures)
 World(Rails.application.routes.url_helpers)

@@ -2,7 +2,7 @@ Given("I am on my profile page") do
   visit user_path(@user)
 end
 
-When("I click {string}") do |button_text|
+When("I click profile {string}") do |button_text|
   if page.has_button?(button_text)
     click_button button_text
   else
@@ -10,7 +10,7 @@ When("I click {string}") do |button_text|
   end
 end
 
-When("I fill in {string} with {string}") do |field, value|
+When("I fill in profile {string} with {string}") do |field, value|
   fill_in field, with: value
 end
 
