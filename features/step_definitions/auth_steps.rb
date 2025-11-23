@@ -27,7 +27,6 @@ Then("I should see a welcome message") do
   expect(page).to have_content("Email: test_user@tamu.edu")
 end
 
-
 Given("I have an account") do
   @user = User.create!(
     first_name: "Test",
@@ -63,6 +62,7 @@ Given("I am logged in") do
     password: "password",
     password_confirmation: "password"
   )
+
   visit new_session_path
   fill_in "Email", with: @user.email
   fill_in "Password", with: "password"
@@ -128,6 +128,7 @@ end
 Then("I should be redirected to my profile page") do
   expect(page.current_path).to eq(user_path(@user))
 end
+
 Then("I should not see {string}") do |content|
   expect(page).not_to have_content(content)
 end

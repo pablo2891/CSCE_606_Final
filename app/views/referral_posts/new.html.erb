@@ -3,17 +3,79 @@
     <h2 class="text-tamu-maroon fw-bold mb-4">Create Referral Post</h2>
 
     <%= form_with model: @referral_post, local: true do |f| %>
+
       <div class="mb-3">
-        <%= f.label :title, "Title", class: "form-label fw-semibold" %>
+        <%= f.label :title, "Public Title", class: "form-label fw-semibold" %>
         <%= f.text_field :title, class: "form-control", required: true %>
       </div>
 
       <div class="mb-3">
         <%= f.label :company_name, "Company", class: "form-label fw-semibold" %>
-        <%= f.select :company_name, current_user.company_verifications.where(is_verified: true).pluck(:company_name), { prompt: "Select a company" }, { class: "form-select", required: true } %>
+        <%= f.select :company_name,
+              current_user.company_verifications.where(is_verified: true).pluck(:company_name),
+              { prompt: "Select a company" },
+              { class: "form-select", required: true } %>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :job_title, "Job Title", class: "form-label fw-semibold" %>
+        <%= f.text_field :job_title, class: "form-control", required: true %>
+      </div>
+
+      <div class="mb-3 row">
+        <div class="col">
+          <%= f.label :department, "Department", class: "form-label fw-semibold" %>
+          <%= f.text_field :department, class: "form-control" %>
+        </div>
+        <div class="col">
+          <%= f.label :location, "Location", class: "form-label fw-semibold" %>
+          <%= f.select :location, ['Remote', 'On-site', 'Hybrid'],
+                       { prompt: 'Select' }, class: 'form-select' %>
+        </div>
+      </div>
+
+      <div class="mb-3 row">
+        <div class="col">
+          <%= f.label :job_level, "Job Level", class: "form-label fw-semibold" %>
+          <%= f.text_field :job_level, class: "form-control",
+                           placeholder: "Entry-level, Mid, Senior..." %>
+        </div>
+        <div class="col">
+          <%= f.label :employment_type, "Employment Type", class: "form-label fw-semibold" %>
+          <%= f.select :employment_type,
+                       ['Full-time', 'Part-time', 'Contract', 'Internship'],
+                       { prompt: 'Select' }, class: 'form-select' %>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <%= f.label :why_referring, "Why are you referring for this role?", class: "form-label fw-semibold" %>
+        <%= f.text_area :why_referring, rows: 4, class: "form-control" %>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Questions for applicants</label>
+
+        <% existing = (@referral_post.questions || []) %>
+
+        <% total_slots = 10 %>
+
+        <% total_slots.times do |i| %>
+          <div class="mb-2">
+            <%= text_field_tag "referral_post[questions][]",
+                  existing[i],
+                  class: "form-control",
+                  placeholder: "Question ##{i+1}" %>
+          </div>
+        <% end %>
+
+        <p class="text-muted small">
+          Leave any unused question fields blank — only filled-in questions will be saved.
+        </p>
       </div>
 
       <%= f.submit "Create Referral Post", class: "tamu-btn tamu-btn-maroon" %>
     <% end %>
+
   </div>
 </div>

@@ -34,3 +34,16 @@ Feature: Experience Management
     Then I should be redirected to my profile page
     And I should see "Experience updated successfully!"
     And I should see "Lead Developer"
+
+  Scenario: Logged in user verifies company email and is redirected to profile
+    And I have a pending verification for "Microsoft" with token "ms_token"
+    When I visit the company verification link with token "ms_token"
+    Then I should see "Company email has been successfully verified!"
+    And I should be redirected to my profile page
+
+  Scenario: Guest user verifies company email and is redirected to root
+    Given a user exists with email "guest@tamu.edu" and token "user_token"
+    And that user has a pending verification for "Amazon" with token "amz_token"
+    When I visit the company verification link with token "amz_token"
+    Then I should see "Company email has been successfully verified!"
+    

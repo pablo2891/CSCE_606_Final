@@ -38,6 +38,15 @@
               Welcome <%= current_user.full_name %>
             </li>
             <li>
+              <%= link_to "Dashboard", dashboard_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(dashboard_path)}" %>
+            </li>
+            <li>
+              <%= link_to "Create Referral Post", new_referral_post_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(new_referral_post_path)}" %>
+            </li>
+            <li>
+              <%= link_to "Conversations", conversations_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(conversations_path)}" %>
+            </li>
+            <li>
               <%= link_to "Profile", user_path(current_user), class: "tamu-navbar-link #{'active' if request.path.start_with?(user_path(current_user))}" %>
             </li>
             <li>

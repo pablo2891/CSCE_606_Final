@@ -16,9 +16,16 @@ class ReferralPost < ApplicationRecord
   # --- 3. Validations ---
   validates :title, presence: true
   validates :company_name, presence: true
+  validates :job_title, presence: true
+  validates :questions, length: { maximum: 10 }, allow_blank: true
 
   # --- 4. Scopes (for easy searching) ---
   # This lets you write `ReferralPost.active_posts` in your controller
   # instead of `ReferralPost.where(status: :active).order(created_at: :desc)`
   scope :active_posts, -> { where(status: :active).order(created_at: :desc) }
+
+  # Ensure questions is always an array (guards in case DB nulls sneak in)
+  def questions
+    (super || []).map(&:to_s)
+  end
 end

@@ -1,0 +1,99 @@
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-tamu-maroon fw-bold">Dashboard</h2>
+    <div>
+      <%= link_to "Create Referral Post", new_referral_post_path, class: "tamu-btn tamu-btn-maroon me-2" %>
+      <%= link_to "Conversations", conversations_path, class: "tamu-btn btn-outline-secondary" %>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Received: requests for my posts -->
+    <div class="col-md-7">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title">Referral Requests Received</h4>
+
+          <% if @received_requests.any? %>
+            <table class="table table-sm mt-3">
+              <thead>
+                <tr>
+                  <th>Candidate</th>
+                  <th>Post</th>
+                  <th>Submitted</th>
+                  <th>Status</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% @received_requests.each do |req| %>
+                  <tr>
+                    <td>
+                      <%= req.user.full_name %><br/>
+                      <small class="text-muted"><%= req.user.email %></small>
+                    </td>
+                    <td>
+                      <%= link_to req.referral_post.title, referral_post_path(req.referral_post) %>
+                    </td>
+                    <td style="max-width: 320px;">
+                      <pre style="white-space:pre-wrap; margin:0;"><%= JSON.pretty_generate(req.submitted_data || {}) rescue req.submitted_data.inspect %></pre>
+                    </td>
+                    <td><%= req.status.capitalize %></td>
+                    <td class="text-end">
+                      <!-- Message button: opens or creates conversation with requester -->
+                      <%= button_to "Message", conversations_path(recipient_id: req.user.id, subject: "Referral: #{req.referral_post.title}"), method: :post, form_class: "d-inline", class: "btn btn-sm btn-outline-primary me-1" %>
+
+                      <!-- Update status form -->
+                      <%= form_with url: update_referral_request_status_path(req), method: :patch, local: true, class: "d-inline" do |f| %>
+                        <%= f.select :status, options_for_select([['Approve', 'approved'], ['Reject', 'rejected'], ['Pending', 'pending']], selected: req.status), {}, class: "form-select form-select-sm d-inline-block" %>
+                        <%= f.submit 'Update', class: 'btn btn-sm btn-outline-secondary ms-1' %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          <% else %>
+            <p class="text-muted">No requests on your posts yet.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sent requests -->
+    <div class="col-md-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title">Your Requests Sent</h4>
+
+          <% if @sent_requests.any? %>
+            <ul class="list-group list-group-flush mt-3">
+              <% @sent_requests.each do |req| %>
+                <li class="list-group-item">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <strong><%= link_to req.referral_post.title, referral_post_path(req.referral_post) %></strong><br/>
+                      <small class="text-muted">Posted by <%= req.referral_post.user.full_name %></small>
+                      <div class="mt-2"><small><%= req.status.capitalize %></small></div>
+                    </div>
+                    <div class="text-end">
+                      <% convo = Conversation.between(current_user.id, req.referral_post.user.id) %>
+                      <% if convo %>
+                        <%= link_to "Open convo", conversation_path(convo), class: "btn btn-sm btn-outline-primary mb-1 d-block" %>
+                      <% else %>
+                        <%= button_to "Message poster", conversations_path(recipient_id: req.referral_post.user.id, subject: "Referral: #{req.referral_post.title}"), method: :post, class: "btn btn-sm btn-outline-primary mb-1 d-block" %>
+                      <% end %>
+                      <div><small class="text-muted"><%= time_ago_in_words(req.created_at) %> ago</small></div>
+                    </div>
+                  </div>
+                </li>
+              <% end %>
+            </ul>
+          <% else %>
+            <p class="text-muted">You haven't requested any referrals yet.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

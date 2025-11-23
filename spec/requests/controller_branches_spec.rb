@@ -94,7 +94,7 @@ RSpec.describe 'Controller branch coverage', type: :request do
   describe 'ReferralRequestsController uniqueness validation' do
     it 'fails second request with uniqueness error' do
       cv = user.company_verifications.create!(company_name: 'Corp', company_email: 'me@corp.com', is_verified: true)
-      post_obj = user.referral_posts.create!(title: 'Role', company_name: 'Corp', company_verification: cv, status: :active)
+      post_obj = user.referral_posts.create!(title: 'Role', job_title: 'Engineer', company_name: 'Corp', company_verification: cv, status: :active)
       post referral_post_referral_requests_path(post_obj), params: {}
       expect(response.status).to be_between(300, 399).inclusive
       # Second request should fail uniqueness

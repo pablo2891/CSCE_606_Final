@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "dashboard/index"
   # Creates: POST /users (users#create), GET /users/new (users#new), GET /users/:id (users#show),
   resources :users, only: [ :new, :create, :show, :edit, :update ] do
     member do
@@ -53,7 +54,30 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root to: redirect("/users/new")
 
+  resources :referral_posts do
+    resources :referral_requests, only: [ :create ] do
+      collection do
+        post "from_message", to: "referral_requests#create_from_message"
+      end
+    end
+  end
 
+  # route to update request status (used by post owner)
+  patch "referral_requests/:id/status", to: "referral_requests#update_status", as: "update_referral_request_status"
+
+  # Dashboard for owners to see incoming requests
+  get "dashboard", to: "dashboard#index", as: "dashboard"
+
+  resources :referral_posts do
+    resources :referral_requests, only: [ :create ]
+    # add endpoint so messages can create referral requests via messaging:
+    post "referral_requests/from_message", to: "referral_requests#create_from_message", as: :referral_requests_from_message
+  end
+
+  # Conversations and nested messages
+  resources :conversations, only: [ :index, :show, :create, :destroy ] do
+    resources :messages, only: [ :create ]
+  end
 
   # Email Verification Routes
   get "/verify_tamu", to: "email_verifications#verify_tamu"

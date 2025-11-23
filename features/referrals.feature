@@ -7,26 +7,26 @@ Feature: Referral Management
     Given I am logged in
     And I have a verified company "Tech Corp"
 
-  Scenario: User creates a referral post successfully
-    Given I am on the new referral post page
-    When I fill in "Title" with "Senior Dev Role"
-    And I select "Tech Corp" from "Company"
-    And I click "Create Referral Post"
-    Then I should be redirected to the referral posts page
-    And I should see "Referral post created!"
-    And I should see "Senior Dev Role"
-    And I should see "Tech Corp"
+Scenario: User creates a referral post successfully
+  Given I am on the new referral post page
+  When I fill in "Public Title" with "Senior Dev Role"
+  And I select "Tech Corp" from "Company"
+  And I fill in "Job Title" with "Senior Developer"
+  And I click "Create Referral Post"
+  Then I should be redirected to the created referral post
+  And I should see "Senior Dev Role"
+  And I should see "Tech Corp"
 
-  Scenario: User requests a referral successfully
-    Given there is a referral post for "Tech Corp"
-    And I am on the referral posts page
-    When I click "Request Referral"
-    Then I should see "Request sent!"
-    And I should see "Pending"
+Scenario: User requests a referral successfully
+  Given there is a referral post for "Tech Corp"
+  And I am viewing referral posts as a different user
+  When I click "Request Referral"
+  Then I should see "Request sent!"
+  And I should see the referral request status as "Pending"
 
   Scenario: User fails to create referral post with missing title
     Given I am on the new referral post page
-    When I fill in "Title" with ""
+    When I fill in "Public Title" with ""
     And I select "Tech Corp" from "Company"
     And I click "Create Referral Post"
     Then I should see "Title can't be blank"

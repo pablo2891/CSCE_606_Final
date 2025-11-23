@@ -7,11 +7,11 @@
         <h5 class="card-title"><%= post.title %></h5>
         <h6 class="card-subtitle mb-2 text-muted"><%= post.company_name %></h6>
         <p class="card-text">Posted by: <%= post.user.full_name %></p>
-        
+
         <% request = post.referral_requests.find_by(user: current_user) %>
         <% if request %>
           <span class="badge bg-secondary"><%= request.status.capitalize %></span>
-        <% elsif post.user != current_user %>
+        <% elsif post.user != current_user && post.active? %>
           <%= button_to "Request Referral", referral_post_referral_requests_path(post), method: :post, class: "tamu-btn tamu-btn-maroon btn-sm" %>
         <% end %>
       </div>

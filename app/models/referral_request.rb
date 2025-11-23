@@ -12,4 +12,10 @@ class ReferralRequest < ApplicationRecord
   # This is a critical business rule:
   # It ensures a user can only make ONE request per post.
   validates :user_id, uniqueness: { scope: :referral_post_id, message: "You have already sent a request for this post" }
+
+  # submitted_data is jsonb so we can store arbitrary question->answer map
+  # convenience: return Hash with string keys
+  def submitted_data_hash
+    submitted_data || {}
+  end
 end

@@ -5,7 +5,7 @@ RSpec.describe ReferralRequest, type: :model do
   let(:user) { User.create!(email: "req+#{SecureRandom.hex(6)}@tamu.edu", password: "password", password_confirmation: "password") }
   let(:poster) { User.create!(email: "poster2+#{SecureRandom.hex(6)}@tamu.edu", password: "password", password_confirmation: "password") }
   let(:company_verification) { CompanyVerification.create!(user: poster, company_email: "hr+#{SecureRandom.hex(6)}@ex.com", company_name: "Ex") }
-  let(:post_record) { ReferralPost.create!(user: poster, company_verification: company_verification, company_name: "Ex", title: "Role") }
+  let(:post_record) { ReferralPost.create!(user: poster, company_verification: company_verification, company_name: "Ex", title: "Role", job_title: "Software Engineer") }
 
   it "is valid when user requests a post" do
     req = ReferralRequest.new(user: user, referral_post: post_record)

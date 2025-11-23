@@ -45,3 +45,33 @@ Feature: Company Verification Management
     And I fill in "Company Email" with "me@google.com"
     And I click "Send Verification Email"
     Then I should see "Failed to create company verification"
+
+  Scenario: User accesses new company verification page with company name parameter
+    Given I have an existing experience at "Tesla"
+    When I visit the new company verification page with company "Tesla"
+    Then I should see the company verification form
+
+  Scenario: User accesses new company verification page without company name
+    When I visit the new company verification page
+    Then I should see the company verification form
+    And the company name field should be empty
+
+  Scenario: User successfully verifies company via verify endpoint
+    Given I have a pending verification for "Netflix" with id 123
+    When I visit the verify endpoint for verification 123 with valid token
+    Then I should see "Company email successfully verified!"
+    And I should be redirected to company verifications page
+
+  Scenario: User fails to verify via verify endpoint with invalid token
+    Given I am not logged in
+    Given I have a pending verification for "Netflix" with id 123
+    When I visit the verify endpoint for verification 123 with invalid token
+    Then I should see "You must be logged in to access this section"
+    Then I should be redirected to new session path
+
+  Scenario: User views index page with both verified and pending verifications
+    Given I have a verified company "Google"
+    And I have a pending verification for "Microsoft"
+    When I visit the company verifications page
+    Then I should see "Google" in the verified list
+    And I should see "Microsoft" in the pending list

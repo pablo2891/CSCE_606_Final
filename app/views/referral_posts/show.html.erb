@@ -1,0 +1,47 @@
+<div class="container py-5">
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <h3 class="card-title"><%= @referral_post.title %></h3>
+      <h5 class="card-subtitle mb-2 text-muted"><%= @referral_post.company_name %> — <%= @referral_post.job_title %></h5>
+
+      <p><strong>Location:</strong> <%= @referral_post.location %> |
+         <strong>Level:</strong> <%= @referral_post.job_level %> |
+         <strong>Type:</strong> <%= @referral_post.employment_type %></p>
+
+      <p><strong>Why referring:</strong></p>
+      <p><%= simple_format(@referral_post.why_referring) %></p>
+
+      <% if @referral_post.questions.present? %>
+        <div class="mb-3">
+          <h6>Questions</h6>
+          <ol>
+            <% @referral_post.questions.each do |q| %>
+              <li><%= q %></li>
+            <% end %>
+          </ol>
+        </div>
+      <% end %>
+
+      <% if logged_in? && current_user != @referral_post.user %>
+        <!-- Link to messaging system -->
+        <%= link_to "Message about this referral", new_message_path(context: "referral_post:#{@referral_post.id}"), class: "tamu-btn tamu-btn-maroon me-2" rescue '#' %>
+
+        <!-- Fallback: also present a quick request form -->
+        <%= form_with url: referral_post_referral_requests_path(@referral_post), method: :post, local: true do |f| %>
+          <% @referral_post.questions.each do |q| %>
+            <div class="mb-2">
+              <label class="form-label"><%= q %></label>
+              <%= text_area_tag "submitted_data[#{q}]", nil, rows: 2, class: "form-control" %>
+            </div>
+          <% end %>
+          <%= f.submit "Request Referral", class: "tamu-btn tamu-btn-maroon" %>
+        <% end %>
+      <% end %>
+
+      <% if logged_in? && current_user == @referral_post.user %>
+        <%= link_to "Edit", edit_referral_post_path(@referral_post), class: "btn btn-outline-secondary" %>
+        <%= button_to "Delete", referral_post_path(@referral_post), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger" %>
+      <% end %>
+    </div>
+  </div>
+</div>

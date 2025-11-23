@@ -1,0 +1,25 @@
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Conversations</h2>
+    <%= link_to "New Message", "#", class: "btn btn-outline-secondary disabled" %>
+  </div>
+
+  <% if @conversations.any? %>
+    <div class="list-group">
+      <% @conversations.each do |c| %>
+        <% other = c.other_user(current_user) %>
+        <%= link_to conversation_path(c), class: "list-group-item list-group-item-action d-flex justify-content-between align-items-start" do %>
+          <div>
+            <div class="fw-bold"><%= other.full_name %></div>
+            <div><small class="text-muted"><%= c.subject || "Conversation" %></small></div>
+          </div>
+          <div class="text-end">
+            <small class="text-muted"><%= time_ago_in_words(c.updated_at) %> ago</small>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-muted">No conversations yet.</p>
+  <% end %>
+</div>
