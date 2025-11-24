@@ -150,6 +150,30 @@ RSpec.describe DashboardController, type: :controller do
           get :index, params: { created_since: "30 days" }
           expect(assigns(:all_referrals)).to include(other_post)
         end
+
+        it "excludes posts created outside the timeframe" do
+          # other_post is 10 days ago
+          get :index, params: { created_since: "90 days" }
+          expect(assigns(:all_referrals)).to include(other_post)
+        end
+
+        it "includes older posts if the range is large enough" do
+          # other_post is 10 days ago, range is 180 days
+          get :index, params: { created_since: "180 days" }
+          expect(assigns(:all_referrals)).to include(other_post)
+        end
+
+        it "includes older posts if the range is large enough" do
+          # other_post is 10 days ago, range is 180 days
+          get :index, params: { created_since: "1 year" }
+          expect(assigns(:all_referrals)).to include(other_post)
+        end
+
+        it "includes older posts if the range is large enough" do
+          # other_post is 10 days ago, range is 180 days
+          get :index, params: { created_since: "9 days" }
+          expect(assigns(:all_referrals)).to include(other_post)
+        end
       end
 
       context "by username" do
