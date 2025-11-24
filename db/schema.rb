@@ -10,16 +10,44 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_22_004000) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_24_020736) do
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "company_verifications", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.string "company_email", null: false
     t.string "company_name", null: false
     t.boolean "is_verified", default: false
     t.string "verification_token"
     t.datetime "verified_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["user_id", "company_email"], name: "index_company_verifications_on_user_id_and_company_email", unique: true
     t.index ["user_id"], name: "index_company_verifications_on_user_id"
     t.index ["verification_token"], name: "index_company_verifications_on_verification_token", unique: true
@@ -47,6 +75,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_004000) do
   end
 
   create_table "referral_posts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "company_verification_id", null: false
     t.string "company_name", null: false
@@ -56,8 +86,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_004000) do
     t.integer "status", default: 0, null: false
     t.json "additional_criteria", default: {}
     t.json "request_criteria", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "job_title"
     t.string "department"
     t.string "location"
@@ -71,19 +99,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_004000) do
   end
 
   create_table "referral_requests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "referral_post_id", null: false
     t.text "note_to_poster"
     t.json "submitted_data", default: {}
     t.integer "status", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["referral_post_id"], name: "index_referral_requests_on_referral_post_id"
     t.index ["user_id", "referral_post_id"], name: "index_referral_requests_on_user_id_and_referral_post_id", unique: true
     t.index ["user_id"], name: "index_referral_requests_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "email", null: false
     t.string "password_digest"
     t.string "first_name"
@@ -93,17 +123,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_22_004000) do
     t.datetime "tamu_verified_at"
     t.string "headline"
     t.text "summary"
-    t.string "resume_url"
     t.string "linkedin_url"
     t.string "github_url"
     t.json "experiences_data", default: [], null: false
     t.json "educations_data", default: [], null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["tamu_verification_token"], name: "index_users_on_tamu_verification_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "company_verifications", "users"
   add_foreign_key "conversations", "users", column: "recipient_id"
   add_foreign_key "conversations", "users", column: "sender_id"

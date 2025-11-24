@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "dashboard/index.html.erb", type: :view do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "renders the dashboard index" do
+    assign(:received_requests, [])
+    assign(:sent_requests, [])
+    render template: 'dashboard/index'
+    expect(rendered).to be_present
+  end
 end

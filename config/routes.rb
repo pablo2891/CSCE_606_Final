@@ -87,8 +87,14 @@ Rails.application.routes.draw do
   if Rails.env.test?
     get "/test/protected_action", to: "application_controller_test#protected_action"
     get "/test/login_gate", to: "application_controller_test#login_gate"
+    # Test-only helper harness for coverage
+    get "/test/coverage_helper", to: "test_coverage#helper_harness"
   end
 
   # Catches all undefined routes and route errors, don't put anything below this line
-  match "*unmatched", to: "redirect#fallback", via: :all
+  # Exclude Active Storage and asset routes from this catch-all so mounted engine routes work.
+  match "*unmatched",
+        to: "redirect#fallback",
+        via: :all,
+        constraints: ->(req) { !req.path.start_with?("/rails/active_storage") && !req.path.start_with?("/assets") && !req.path.start_with?("/packs") }
 end
