@@ -15,7 +15,7 @@
           </div>
         <% end %>
 
-        <%= form_with model: @user, local: true, data: { turbo: false } do |f| %>
+        <%= form_with model: @user, local: true, data: { turbo: false }, html: { multipart: true } do |f| %>
 
           <div class="row mb-3">
             <div class="col-md-6">
@@ -52,9 +52,16 @@
             <%= f.label :summary, class: "form-label fw-semibold" %>
             <%= f.text_area :summary, rows: 4, class: "form-control" %>
           </div>
-            <div class="mb-3">
-              <%= f.label :resume_url, "Resume URL", class: "form-label fw-semibold" %>
-              <%= f.url_field :resume_url, class: "form-control", placeholder: "https://example.com/resume.pdf" %>
+          <div class="mb-3">
+            <%= f.label :resume, "Upload Resume (PDF)", class: "form-label fw-semibold" %>
+            <%= f.file_field :resume, accept: "application/pdf", class: "form-control" %>
+            <% if @user.resume.attached? && @user.resume.blob&.persisted? %>
+              <div class="mt-2">
+                <%= link_to "Download Resume", url_for(@user.resume), class: "me-3", target: "_blank", rel: "noopener", data: { turbo: false } %>
+                <%= check_box_tag 'remove_resume', '1', false, id: 'remove_resume' %>
+                <%= label_tag 'remove_resume', 'Remove Resume' %>
+              </div>
+            <% end %>
           </div>
          <div class="mb-3">
               <%= f.label :linkedin_url, "LinkedIn URL", class: "form-label fw-semibold" %>

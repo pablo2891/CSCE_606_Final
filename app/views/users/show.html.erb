@@ -38,8 +38,10 @@
                 <% if @user.github_url.present? %>
                   <p class="mb-1"><strong>GitHub:</strong> <a href="<%= @user.github_url %>" target="_blank" class="text-tamu-maroon hover:underline"><%= @user.github_url %></a></p>
                 <% end %>
-                <% if @user.resume_url.present? %>
+                <% if @user.respond_to?(:resume_url) && @user.resume_url.present? %>
                   <p class="mb-1"><strong>Resume:</strong> <a href="<%= @user.resume_url %>" target="_blank" class="text-tamu-maroon hover:underline">View</a></p>
+                <% elsif @user.resume.attached? %>
+                  <p class="mb-1"><strong>Resume:</strong> <%= link_to "View", url_for(@user.resume), target: "_blank", class: "text-tamu-maroon hover:underline" %></p>
                 <% end %>
               </div>
               <div class="card rounded-md p-3 border-tamu-gray-300 mt-4">

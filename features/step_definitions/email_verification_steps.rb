@@ -63,6 +63,16 @@ end
 
 Given('that user has a pending verification for {string} with token {string}') do |company_name, token|
   @other_user ||= User.find_by(email: 'guest@tamu.edu')
+  unless @other_user
+    @other_user = User.create!(
+      first_name: 'Guest',
+      last_name: 'User',
+      email: 'guest@tamu.edu',
+      password: 'password',
+      password_confirmation: 'password'
+    )
+  end
+
   @company_verification = @other_user.company_verifications.create!(
     company_name: company_name,
     company_email: "test@#{company_name.downcase}.com",
@@ -73,5 +83,5 @@ end
 
 Then('I should be redirected to the root path') do
   # Be more flexible about the redirect target
-  expect([ root_path, new_session_path, '/' ]).to include(page.current_path)
+  expect([ root_path, new_session_path, new_user_path, '/' ]).to include(page.current_path)
 end

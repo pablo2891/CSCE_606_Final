@@ -33,7 +33,7 @@ end
 Given("I have a pending verification for {string}") do |company_name|
   @user.company_verifications.create!(
     company_name: company_name,
-    company_email: "me@#{company_name.downcase}.com",
+    company_email: "me@#{company_name.parameterize}.com",
     is_verified: false
   )
 end
@@ -63,7 +63,8 @@ Given("the system fails to save company verifications") do
 end
 
 When('I visit the new company verification page with company {string}') do |company_name|
-  visit new_company_verification_path(company: company_name)
+  # Controller expects param key :company_name
+  visit new_company_verification_path(company_name: company_name)
 end
 
 Then('I should see the company verification form') do
@@ -88,7 +89,7 @@ end
 Given('I have a pending verification for {string} with id {int}') do |company_name, id|
   @company_verification = @user.company_verifications.create!(
     company_name: company_name,
-    company_email: "test@#{company_name.downcase}.com",
+    company_email: "test@#{company_name.parameterize}.com",
     is_verified: false
   )
   # Force the ID for testing purposes

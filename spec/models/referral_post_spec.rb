@@ -21,4 +21,11 @@ RSpec.describe ReferralPost, type: :model do
     ReferralPost.create!(user: user, company_verification: company_verification, company_name: 'Example', title: 'B', job_title: 'Developer', status: :closed)
     expect(ReferralPost.active_posts.all? { |p| p.status == 'active' || p.status == :active || p.status.to_s == 'active' || p.active? }).to be true
   end
+
+  it 'returns empty array for questions when nil and stringifies elements' do
+    rp = ReferralPost.create!(user: user, company_verification: company_verification, company_name: 'Example', title: 'Q', job_title: 'Dev', questions: nil)
+    expect(rp.questions).to eq([])
+    rp2 = ReferralPost.create!(user: user, company_verification: company_verification, company_name: 'Example', title: 'Q2', job_title: 'Dev', questions: [ 1, :two ])
+    expect(rp2.questions).to all(be_a(String))
+  end
 end
