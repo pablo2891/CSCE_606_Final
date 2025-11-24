@@ -37,11 +37,11 @@ class DashboardController < ApplicationController
     # --- Filtering Logic ---
 
     # 1. Initialize the query (Use includes to prevent N+1 queries if you display user/company info)
-    @all_referrals = ReferralPost.includes(:user)
+    @all_referrals = ReferralPost.all
 
     # 2. Filter by selected_user (Requires joining the User table)
     if @selected_user.present?
-      @all_referrals = @all_referrals.joins(:user).where(users: { username: @selected_user })
+      @all_referrals = @all_referrals.joins(:user).where(users: { first_name: @selected_user })
     end
 
     # 3. Filter by selected_company (Using LIKE for case-insensitive partial match)

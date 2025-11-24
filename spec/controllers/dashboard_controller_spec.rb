@@ -3,12 +3,17 @@ require 'rails_helper'
 RSpec.describe DashboardController, type: :controller do
   render_views
   # Assuming you are using Devise or a similar auth helper
-  let(:user) { create(:user, email: "alice.yi@tamu.edu", password: "123456") }
+  let!(:user) { User.create(first_name: "Alice", last_name: "Yi", email: "alice.yi@tamu.edu", password: "123456") }
+  let!(:user_bob) { User.create(first_name: "Bob", last_name: "Lai", email: "bob.lai@tamu.edu", password: "123456") }
+  let!(:verification_google) { CompanyVerification.create!(user: user, company_email: "alice.yi@google.com", company_name: "Google", is_verified: true) }
+  let!(:verification_amazon) { CompanyVerification.create!(user: user, company_email: "alice.yi@amazon.com", company_name: "Amazon", is_verified: true) }
+  let!(:verification_samsung) { CompanyVerification.create!(user: user_bob, company_email: "bob.lai@samsung.com", company_name: "Samsung", is_verified: true) }
 
   # Create a base post that we will try to match against
   # We use let! (bang) so these are created in the DB before the get request
-  let!(:matching_post) { create(:referral_post,
-    user: :user,
+  let!(:matching_post) { ReferralPost.create(user: user,
+    title: "Software Engineer Position",
+    company_verification: verification_google,
     company_name: "Google",
     job_title: "Senior Software Engineer",
     department: "Engineering",
@@ -19,9 +24,23 @@ RSpec.describe DashboardController, type: :controller do
     created_at: 1.hour.ago
   )}
 
-  let!(:other_post) { create(:referral_post,
-    user: :user,
+  let!(:other_post) { ReferralPost.create(user: user,
+    title: "Sales Associate Position",
+    company_verification: verification_amazon,
     company_name: "Amazon",
+    job_title: "Sales Associate",
+    department: "Sales",
+    location: "On-site",
+    job_level: "Entry Level",
+    employment_type: "Part-time",
+    status: 1, # Assuming 1 is closed/draft
+    created_at: 10.days.ago
+  )}
+
+  let!(:bob_post) { ReferralPost.create(user: user_bob,
+    title: "Samsung Marketing Role",
+    company_verification: verification_samsung,
+    company_name: "Samsung",
     job_title: "Sales Associate",
     department: "Sales",
     location: "On-site",
@@ -33,7 +52,7 @@ RSpec.describe DashboardController, type: :controller do
 
   before do
     # Log the user in before every test
-    sign_in user
+    session[:user_id] = user.id
   end
 
   describe "GET #index" do
@@ -134,13 +153,10 @@ RSpec.describe DashboardController, type: :controller do
       end
 
       context "by username" do
-        let(:target_user) { create(:user, username: "TargetUser") }
-        let!(:user_post) { create(:referral_post, user: target_user) }
-
         it "filters by user username" do
-          get :index, params: { username: "TargetUser" }
-          expect(assigns(:all_referrals)).to include(user_post)
-          expect(assigns(:all_referrals)).not_to include(matching_post)
+          get :index, params: { username: "Bob" }
+          expect(assigns(:all_referrals)).to include(bob_post)
+          expect(assigns(:all_referrals)).not_to include(matching_post, other_post)
         end
       end
 
