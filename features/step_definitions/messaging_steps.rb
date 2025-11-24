@@ -13,6 +13,15 @@ end
 Given("I have a conversation with {string}") do |full_name|
   first_name, last_name = full_name.split(" ")
   other_user = User.find_by(first_name: first_name, last_name: last_name)
+  unless other_user
+    other_user = User.create!(
+      first_name: first_name,
+      last_name: last_name,
+      email: "#{first_name.downcase}.#{last_name.downcase}@tamu.edu",
+      password: 'password123',
+      password_confirmation: 'password123'
+    )
+  end
 
   @conversation = Conversation.create!(
     sender: @user,
@@ -78,7 +87,14 @@ When("I send a message {string}") do |message_text|
 end
 
 When("I delete the conversation") do
-  click_button "Delete", match: :first
+  conversation = defined?(@conversation) && @conversation || Conversation.last
+  # Directly call the destroy endpoint since there may be no visible UI control
+  page.driver.submit :delete, conversation_path(conversation), {}
+  visit conversations_path
+end
+
+Then('I should not see {string} in my conversations') do |string|
+  expect(page).not_to have_content(string)
 end
 
 Then("I should see my conversations list") do

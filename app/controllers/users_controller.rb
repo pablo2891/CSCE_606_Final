@@ -20,8 +20,6 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @user.reload
-
     @user_verifications = @user.company_verifications.index_by { |cv| cv.company_name.downcase.strip }
     @verified_companies = @user.company_verifications.where(is_verified: true)
 
@@ -31,13 +29,18 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
-
     # Only allow current_user to edit their own profile
     redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
   end
 
   def update
     @user = User.find(params[:id])
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+
+    if params[:remove_resume] == "1"
+      @user.resume.purge_later
+    end
+
     if @user.update(user_params)
       redirect_to @user, notice: "Profile updated successfully!"
     else
@@ -48,13 +51,13 @@ class UsersController < ApplicationController
   # Experience
   def add_experience
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
     @experience = {} # placeholder for form
   end
 
   def create_experience
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
 
     exp = params.require(:experience).permit(:title, :company, :start_date, :end_date, :description).to_h
 
@@ -75,34 +78,39 @@ class UsersController < ApplicationController
 
   def edit_experience
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
     @index = params[:index].to_i
     @experience = @user.experiences_data[@index]
   end
 
   def update_experience
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
     @index = params[:index].to_i
 
     updated_exp = params.require(:experience).permit(:title, :company, :start_date, :end_date, :description).to_h
     @user.experiences_data[@index] = updated_exp
-    @user.save!
 
-    redirect_to user_path(@user), notice: "Experience updated successfully!"
+    if @user.save
+      redirect_to user_path(@user), notice: "Experience updated successfully!"
+    else
+      flash.now[:error] = @user.errors.full_messages.join(", ")
+      @experience = @user.experiences_data[@index]
+      render :edit_experience
+    end
   end
 
 
   # Education
   def add_education
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
     @education = {}
   end
 
   def create_education
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
 
     edu = params.require(:education).permit(:degree, :school, :start_date, :end_date, :description).to_h
 
@@ -124,21 +132,26 @@ class UsersController < ApplicationController
 
   def edit_education
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
     @index = params[:index].to_i
     @education = @user.educations_data[@index]
   end
 
   def update_education
     @user = User.find(params[:id])
-    redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
     @index = params[:index].to_i
 
     updated_edu = params.require(:education).permit(:degree, :school, :start_date, :end_date, :description).to_h
     @user.educations_data[@index] = updated_edu
-    @user.save!
 
-    redirect_to user_path(@user), notice: "Education updated successfully!"
+    if @user.save
+      redirect_to user_path(@user), notice: "Education updated successfully!"
+    else
+      flash.now[:error] = @user.errors.full_messages.join(", ")
+      @education = @user.educations_data[@index]
+      render :edit_education
+    end
   end
 
   private
@@ -148,7 +161,7 @@ class UsersController < ApplicationController
       :email, :password, :password_confirmation,
       :first_name, :last_name,
       :headline, :summary, :resume_url,
-      :linkedin_url, :github_url
+      :linkedin_url, :github_url, :resume
     )
   end
 end

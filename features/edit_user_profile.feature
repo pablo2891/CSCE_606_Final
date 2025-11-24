@@ -9,28 +9,27 @@ Feature: Edit User Profile
     And I fill in the profile form with:
       | Headline     | Senior Developer |
       | Summary      | I build cool things. |
-      | Resume URL   | http://example.com/resume.pdf |
       | GitHub URL   | https://github.com/johndoe |
       | LinkedIn URL | https://linkedin.com/in/johndoe |
-    And I press "Save"
+    And I press "Save Changes"
     Then I should see "Profile updated successfully!"
     And I should be redirected to my profile page
     And I should see "Senior Developer"
     And I should see "I build cool things."
 
-  Scenario: User updates only their resume URL
+  Scenario: User uploads a resume
     Given I am logged in
     And I visit my edit profile page
-    When I fill in "Resume URL" with "http://example.com/new_resume.pdf"
-    And I press "Save"
+    When I attach "spec/fixtures/files/sample.pdf" to "user_resume"
+    And I press "Save Changes"
     Then I should see "Profile updated successfully!"
-    And I should find my resume link "http://example.com/new_resume.pdf" on my profile page
+    And I should see my resume file attached
 
   Scenario: User submits new password without confirmation
     Given I am logged in
     And I visit my edit profile page
     When I fill in "Password" with "newpassword123"
-    And I press "Save"
+    And I press "Save Changes"
     Then I should see "Password confirmation doesn't match Password"
 
   Scenario: Logged-in user attempts to edit another user's profile
