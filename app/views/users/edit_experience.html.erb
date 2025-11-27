@@ -24,10 +24,20 @@
         <%= f.text_area :description, rows: 3, class: "form-control", value: @experience["description"] %>
       </div>
 
-      <div class="d-flex align-items-center pt-3">
-        <%= f.submit "Update Experience", class: "tamu-btn tamu-btn-maroon me-2" %>
-        <%= link_to "Cancel", user_path(@user), class: "tamu-btn btn-outline-maroon" %>
+      <div class="mb-3">
+        <%= f.submit "Update Experience", class: "tamu-btn tamu-btn-maroon w-100" %>
       </div>
     <% end %>
+
+    <div class="d-flex align-items-center justify-content-center pt-3">
+      <%= button_to "Delete Experience",
+          delete_experience_user_path(@user, @index),
+          method: :delete,
+          data: { confirm: "Are you sure you want to delete this experience?" },
+          form: { class: "d-inline" },
+          class: "btn btn-danger text-white me-2" %>
+
+      <%= link_to "Cancel", user_path(@user), class: "tamu-btn btn-outline-maroon" %>
+    </div>
   </div>
 </div>

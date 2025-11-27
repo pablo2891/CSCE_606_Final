@@ -100,6 +100,18 @@ class UsersController < ApplicationController
     end
   end
 
+  def delete_experience
+    @user = User.find(params[:id])
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    @index = params[:index].to_i
+
+    @user.experiences_data.delete_at(@index)
+    if @user.save 
+      redirect_to user_path(@user), notice: "Experience entry deleted."
+    else
+      redirect_to user_path(@user), alert: "Failed to delete experience entry."
+    end
+  end
 
   # Education
   def add_education
@@ -151,6 +163,19 @@ class UsersController < ApplicationController
       flash.now[:error] = @user.errors.full_messages.join(", ")
       @education = @user.educations_data[@index]
       render :edit_education
+    end
+  end
+
+  def delete_education
+    @user = User.find(params[:id])
+    return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
+    @index = params[:index].to_i
+
+    @user.educations_data.delete_at(@index)
+    if @user.save 
+      redirect_to user_path(@user), notice: "Education entry deleted."
+    else
+      redirect_to user_path(@user), alert: "Failed to delete education entry."
     end
   end
 

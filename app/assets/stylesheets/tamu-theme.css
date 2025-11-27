@@ -185,6 +185,18 @@
     opacity: 0.8;
 }
 
+.btn-underline-danger {
+    color: red;
+    background-color: transparent !important;
+    border: none;
+}
+
+.btn-underline-danger:hover {
+    background-color: var(--tamu-gray-100);
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
 
 /* Hover Opacity Helpers */
 .hover-opacity-80:hover { opacity: 0.8; }
