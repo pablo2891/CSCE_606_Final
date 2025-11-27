@@ -1,5 +1,8 @@
 <div class="container py-5">
-  <h2 class="text-tamu-maroon fw-bold mb-4">Referral Posts</h2>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-tamu-maroon fw-bold">Your Referral Posts</h2>
+    <%= link_to "New Referral Post", new_referral_post_path, class: "tamu-btn tamu-btn-maroon text-decoration-none" %>
+  </div>
 
   <% @referral_posts.each do |post| %>
     <div class="card shadow-sm mb-3">
