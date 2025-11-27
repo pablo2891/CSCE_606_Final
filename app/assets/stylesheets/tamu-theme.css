@@ -265,12 +265,12 @@
   font-weight: 700;
 }
 
-.tamu-navbar-links li:first-child .tamu-navbar-link {
+/* .tamu-navbar-links li:first-child .tamu-navbar-link {
   border-left: none;
 }
 .tamu-navbar-links li:last-child .tamu-navbar-link {
   border-right: none;
-}
+} */
 
 .tamu-navbar-welcome {
   display: flex;
