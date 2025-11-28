@@ -15,7 +15,9 @@ class ReferralPostsController < ApplicationController
       @referral_posts = @referral_posts.where.not(user_id: current_user.id)
     end
 
-    @referral_posts = @referral_posts.search(params[:q]) if params[:q].present?
+    # Support both `query` (preferred) and legacy `q` param names.
+    search_term = params[:query].presence || params[:q].presence
+    @referral_posts = @referral_posts.search(search_term) if search_term.present?
     @referral_posts = @referral_posts.order(created_at: :desc).page(params[:page]).per(5)
   end
 
