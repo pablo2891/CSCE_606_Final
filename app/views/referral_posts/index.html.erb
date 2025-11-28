@@ -7,18 +7,18 @@
   <!-- Search Bar -->
   <%= form_with url: referral_posts_path, method: :get, local: true, class: "mb-4" do %>
     <div class="input-group">
-      <%= text_field_tag :q, params[:q], placeholder: "Search by company, title, job title…", class: "form-control" %>
+      <%= text_field_tag :query, params[:query] || params[:q], placeholder: "Search by company, title, job title…", class: "form-control" %>
       <button class="btn btn-outline-maroon" type="submit">Search</button>
     </div>
   <% end %>
 
   <div class="btn-group mb-3" role="group">
     <%= link_to "All Posts",
-        referral_posts_path(q: params[:q], mine: "false"),
+      referral_posts_path(query: params[:query] || params[:q], mine: "false"),
         class: "btn btn-outline-primary", style: "#{(params[:mine] == 'false' || params[:mine].blank?) ? 'background-color: #500000 !important; color: #FFFFFF !important;' : 'background-color: #FFFFFF !important; color: #500000 !important;'} border-color: #500000 !important;" %>
 
     <%= link_to "My Posts",
-        referral_posts_path(q: params[:q], mine: "true"),
+      referral_posts_path(query: params[:query] || params[:q], mine: "true"),
         class: "btn btn-outline-primary", style: "#{params[:mine] == 'true' ? 'background-color: #500000 !important; color: #FFFFFF !important;' : 'background-color: #FFFFFF !important; color: #500000 !important;'} border-color: #500000 !important;" %>
   </div>
 
