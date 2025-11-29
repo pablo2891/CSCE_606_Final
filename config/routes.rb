@@ -8,12 +8,14 @@ Rails.application.routes.draw do
 
       get  "edit_experience/:index", to: "users#edit_experience", as: :edit_experience
       patch "update_experience/:index", to: "users#update_experience", as: :update_experience
+      delete "delete_experience/:index", to: "users#delete_experience", as: :delete_experience
 
       get :add_education
       post :create_education
 
       get  "edit_education/:index", to: "users#edit_education", as: :edit_education
       patch "update_education/:index", to: "users#update_education", as: :update_education
+      delete "delete_education/:index", to: "users#delete_education", as: :delete_education
     end
   end
   # Creates: GET /session/new (sessions#new), POST /session (sessions#create), DELETE /session (sessions#destroy)
@@ -54,13 +56,13 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root to: redirect("/users/new")
 
-  resources :referral_posts do
-    resources :referral_requests, only: [ :create ] do
-      collection do
-        post "from_message", to: "referral_requests#create_from_message"
-      end
-    end
-  end
+  # resources :referral_posts do
+  #   resources :referral_requests, only: [ :create ] do
+  #     collection do
+  #       post "from_message", to: "referral_requests#create_from_message"
+  #     end
+  #   end
+  # end
 
   # route to update request status (used by post owner)
   patch "referral_requests/:id/status", to: "referral_requests#update_status", as: "update_referral_request_status"

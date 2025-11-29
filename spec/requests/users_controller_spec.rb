@@ -137,6 +137,28 @@ RSpec.describe UsersController, type: :request do
       expect(response).to redirect_to(user_path(user))
       expect(user.reload.experiences_data.first["title"]).to eq("New")
     end
+
+    it "deletes experience" do
+      user.experiences_data << { "title" => "ToDelete", "company" => "DeleteCo" }
+      user.save
+      delete delete_experience_user_path(user, index: 0)
+      expect(response).to redirect_to(user_path(user))
+      expect(user.reload.experiences_data).to be_empty
+    end
+
+    it "handles failure to delete experience" do
+      user.experiences_data << { "title" => "ToDelete", "company" => "DeleteCo" }
+      user.save
+
+      # Force @user.save to return false
+      allow_any_instance_of(User).to receive(:save).and_return(false)
+
+      delete delete_experience_user_path(user, index: 0)
+
+      expect(response).to redirect_to(user_path(user))
+      expect(flash[:alert]).to eq("Failed to delete experience entry.")
+      expect(user.reload.experiences_data).not_to be_empty
+    end
   end
 
   describe "Education Actions" do
@@ -173,6 +195,28 @@ RSpec.describe UsersController, type: :request do
       patch update_education_user_path(user, index: 0), params: { education: { degree: "New" } }
       expect(response).to redirect_to(user_path(user))
       expect(user.reload.educations_data.first["degree"]).to eq("New")
+    end
+
+    it "deletes education" do
+      user.educations_data << { "degree" => "ToDelete", "school" => "DeleteU" }
+      user.save
+      delete delete_education_user_path(user, index: 0)
+      expect(response).to redirect_to(user_path(user))
+      expect(user.reload.educations_data).to be_empty
+    end
+
+    it "handles failure to delete education" do
+      user.educations_data << { "degree" => "ToDelete", "school" => "DeleteU" }
+      user.save
+
+      # Force @user.save to return false
+      allow_any_instance_of(User).to receive(:save).and_return(false)
+
+      delete delete_education_user_path(user, index: 0)
+
+      expect(response).to redirect_to(user_path(user))
+      expect(flash[:alert]).to eq("Failed to delete education entry.")
+      expect(user.reload.educations_data).not_to be_empty
     end
   end
 end

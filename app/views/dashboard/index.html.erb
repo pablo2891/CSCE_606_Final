@@ -20,9 +20,10 @@
                 <tr>
                   <th>Candidate</th>
                   <th>Post</th>
-                  <th>Submitted</th>
-                  <th>Status</th>
-                  <th class="text-end">Actions</th>
+                  <th>Link To Request</th>
+                  <th>Submitted Data</th>
+                  <th style="min-width: 80px !important;">Status</th>
+                  <th class="text-center" style="width: 110px !important;">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -38,16 +39,43 @@
                     <td style="max-width: 320px;">
                       <%# <pre style="white-space:pre-wrap; margin:0;"><%= JSON.pretty_generate(req.submitted_data || {}) rescue req.submitted_data.inspect %></pre>
                       <%= link_to "See Full Submission", referral_post_referral_request_path(req.referral_post, req) %>
+                    <td style="max-width: 320px; vertical-align: top;">
+                      <% if req.submitted_data.blank? %>
+                        none
+                      <% else %>
+                        <ul style="padding-left: 1rem; margin:0;">
+                          <% req.submitted_data.each_with_index do |(question, answer), index| %>
+                            <li>
+                              <strong>Q<%= index + 1 %>: <%= question.to_s %></strong>
+                              <% if answer.is_a?(Array) %>
+                                <ul style="margin: 0.25rem 0 0 1rem; padding-left: 0;">
+                                  <% answer.each do |a| %>
+                                    <li><%= a.to_s %></li>
+                                  <% end %>
+                                </ul>
+                              <% elsif answer.is_a?(Hash) %>
+                                <ul style="margin: 0.25rem 0 0 1rem; padding-left: 0;">
+                                  <% answer.each do |sub_q, sub_a| %>
+                                    <li><strong><%= sub_q.to_s %>:</strong> <%= sub_a.to_s %></li>
+                                  <% end %>
+                                </ul>
+                              <% else %>
+                                <div style="margin-left: 0.5rem;"><%= answer.to_s %></div>
+                              <% end %>
+                            </li>
+                          <% end %>
+                        </ul>
+                      <% end %>
                     </td>
-                    <td><%= req.status.capitalize %></td>
-                    <td class="text-end">
+                    <td style="min-width: 80px !important;"><%= req.status.capitalize %></td>
+                    <td class="text-center d-flex align-items-center flex-column" style="width: 110px !important;">
                       <!-- Message button: opens or creates conversation with requester -->
-                      <%= button_to "Message", conversations_path(recipient_id: req.user.id, subject: "Referral: #{req.referral_post.title}"), method: :post, form_class: "d-inline", class: "btn btn-sm btn-outline-primary me-1" %>
+                      <%= button_to "Message", conversations_path(recipient_id: req.user.id, subject: "Referral: #{req.referral_post.title}"), method: :post, form_class: "d-inline w-100", class: "btn btn-sm btn-outline-primary mb-1 w-100" %>
 
                       <!-- Update status form -->
-                      <%= form_with url: update_referral_request_status_path(req), method: :patch, local: true, class: "d-inline" do |f| %>
-                        <%= f.select :status, options_for_select([['Approve', 'approved'], ['Reject', 'rejected'], ['Pending', 'pending']], selected: req.status), {}, class: "form-select form-select-sm d-inline-block" %>
-                        <%= f.submit 'Update', class: 'btn btn-sm btn-outline-secondary ms-1' %>
+                      <%= form_with url: update_referral_request_status_path(req), method: :patch, local: true, class: "d-inline d-flex flex-column justify-content-center align-items-center" do |f| %>
+                        <%= f.select :status, options_for_select([['Approve', 'approved'], ['Reject', 'rejected'], ['Pending', 'pending']], selected: req.status), {}, class: "form-select form-select-sm d-inline-block mb-1" %>
+                        <%= f.submit 'Update', class: 'btn btn-sm btn-outline-secondary ms-1 w-100' %>
                       <% end %>
                     </td>
                   </tr>

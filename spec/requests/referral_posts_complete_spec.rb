@@ -165,7 +165,8 @@ RSpec.describe "ReferralPosts Complete Coverage", type: :request do
         status: :closed
       )
 
-      get referral_posts_path
+      get referral_posts_path, params: { mine: "true" }
+
       expect(response.body).to include("Senior Engineer")
       expect(response.body).not_to include("Closed Post")
     end

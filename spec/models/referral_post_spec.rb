@@ -28,4 +28,45 @@ RSpec.describe ReferralPost, type: :model do
     rp2 = ReferralPost.create!(user: user, company_verification: company_verification, company_name: 'Example', title: 'Q2', job_title: 'Dev', questions: [ 1, :two ])
     expect(rp2.questions).to all(be_a(String))
   end
+
+  describe ".search" do
+    let(:user1) { User.create!(email: "test@tamu.edu", password: "password") }
+    let(:company_verification1) { CompanyVerification.create!(user: user, company_email: "hr@tech.com", company_name: "Tech Corp", is_verified: true) }
+
+    let!(:post1) { ReferralPost.create!(user: user1, company_verification: company_verification1, company_name: "Tech Corp", title: "Backend Developer", job_title: "Developer", department: "Engineering", location: "College Station") }
+    let!(:post2) { ReferralPost.create!(user: user1, company_verification: company_verification1, company_name: "Biz Inc", title: "Frontend Engineer", job_title: "Engineer", department: "Design", location: "Austin") }
+
+    it 'returns posts matching the company_name' do
+      expect(ReferralPost.search("Tech")).to include(post1)
+      expect(ReferralPost.search("Tech")).not_to include(post2)
+    end
+
+    it 'returns posts matching the title' do
+      expect(ReferralPost.search("Frontend")).to include(post2)
+      expect(ReferralPost.search("Frontend")).not_to include(post1)
+    end
+
+    it 'returns posts matching the job_title' do
+      expect(ReferralPost.search("Developer")).to include(post1)
+      expect(ReferralPost.search("Developer")).not_to include(post2)
+    end
+
+    it 'returns posts matching the department' do
+      expect(ReferralPost.search("Design")).to include(post2)
+      expect(ReferralPost.search("Design")).not_to include(post1)
+    end
+
+    it 'returns posts matching the location' do
+      expect(ReferralPost.search("College Station")).to include(post1)
+      expect(ReferralPost.search("College Station")).not_to include(post2)
+    end
+
+    it 'is case-insensitive' do
+      expect(ReferralPost.search("tech corp")).to include(post1)
+    end
+
+    it 'returns an empty relation if no matches' do
+      expect(ReferralPost.search("Nonexistent")).to be_empty
+    end
+  end
 end

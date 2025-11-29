@@ -27,9 +27,28 @@
     <nav class="tamu-navbar">
       <div class="tamu-navbar-container shadow-lg">
         <!-- Brand / Logo -->
-        <div class="tamu-navbar-brand">
-          <%= link_to "LinkedOUT", root_path, class: "tamu-navbar-logo" %>
-        </div>
+        <ul class="tamu-navbar-links">
+          <% if logged_in? %>
+            <li class="tamu-navbar-link">
+              <%= link_to "LinkedOUT", dashboard_path, class: "tamu-navbar-logo" %>
+            </li>
+            <li>
+              <%= link_to "Dashboard", dashboard_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(dashboard_path)}" %>
+            </li>
+            <li>
+              <%= link_to "Search", referral_posts_path,
+                  class: "tamu-navbar-link #{'active' if request.path.start_with?(referral_posts_path) && request.path != new_referral_post_path}" %>
+            </li>
+            <li>
+              <%= link_to "Create a Post", new_referral_post_path,
+                  class: "tamu-navbar-link #{'active' if request.path == new_referral_post_path}" %>
+            </li>
+          <% else %>
+            <li class="tamu-navbar-link">
+              <%= link_to "LinkedOUT", root_path, class: "tamu-navbar-logo" %>
+            </li>
+          <% end %>
+        </ul>
 
         <!-- Navigation Links -->
         <ul class="tamu-navbar-links">
@@ -38,19 +57,13 @@
               Welcome <%= current_user.full_name %>
             </li>
             <li>
-              <%= link_to "Dashboard", dashboard_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(dashboard_path)}" %>
-            </li>
-            <li>
-              <%= link_to "Create Referral Post", new_referral_post_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(new_referral_post_path)}" %>
+              <%= link_to "Verifications", company_verifications_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(company_verifications_path)}" %>
             </li>
             <li>
               <%= link_to "Conversations", conversations_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(conversations_path)}" %>
             </li>
             <li>
               <%= link_to "Profile", user_path(current_user), class: "tamu-navbar-link #{'active' if request.path.start_with?(user_path(current_user))}" %>
-            </li>
-            <li>
-              <%= link_to "Verifications", company_verifications_path, class: "tamu-navbar-link #{'active' if request.path.start_with?(company_verifications_path)}" %>
             </li>
             <li>
               <%= button_to "Logout", session_path, method: :delete, class: "tamu-navbar-link text-center fw-bold px-4", style: "background:none; border:none; padding:0; cursor:pointer; align-text: center; line-height: 60px;" %>

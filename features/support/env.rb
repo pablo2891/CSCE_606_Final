@@ -26,3 +26,15 @@ end
 # Ensure transactional fixtures for cucumber
 World(ActiveRecord::TestFixtures)
 World(Rails.application.routes.url_helpers)
+
+require 'rspec/mocks'
+World(RSpec::Mocks::ExampleMethods)
+
+Before do
+  RSpec::Mocks.setup
+end
+
+After do
+  RSpec::Mocks.verify
+  RSpec::Mocks.teardown
+end

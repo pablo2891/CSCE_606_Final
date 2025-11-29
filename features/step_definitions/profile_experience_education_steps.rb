@@ -150,3 +150,8 @@ When("I visit the update education page of entry {int} for {string} {string}") d
   user = User.find_by(first_name: first, last_name: last)
   visit update_education_user_path(user, index: idx)
 end
+
+# Edit an education
+When("I visit the edit education page for index {int}") do |index|
+  visit edit_education_user_path(@user, index: index)
+end
