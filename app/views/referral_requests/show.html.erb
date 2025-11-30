@@ -1,47 +1,94 @@
+<% referral_request = @referral_request %>
+<% referral_post = referral_request.referral_post %>
+<% requester = referral_request.user %>
+
 <div class="container py-5">
-  <div class="card shadow-sm mb-3">
+  <div class="card shadow-sm mb-4">
     <div class="card-body">
-      <h3 class="card-title"><%= @referral_post.title %></h3>
-      <h5 class="card-subtitle mb-2 text-muted"><%= @referral_post.company_name %> — <%= @referral_post.job_title %></h5>
+      <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+        <div>
+          <h3 class="card-title mb-1">Referral request for <%= referral_post.title %></h3>
+          <h5 class="card-subtitle text-muted">
+            <%= referral_post.company_name %> — <%= referral_post.job_title %>
+          </h5>
+        </div>
+        <span class="badge bg-secondary text-uppercase align-self-start">
+          <%= referral_request.status %>
+        </span>
+      </div>
 
-      <p><strong>Location:</strong> <%= @referral_post.location %> |
-         <strong>Level:</strong> <%= @referral_post.job_level %> |
-         <strong>Type:</strong> <%= @referral_post.employment_type %></p>
+      <p class="mt-3 mb-1">
+        <strong>Requester:</strong>
+        <%= requester.full_name %> (<%= mail_to requester.email %>)
+      </p>
 
-      <p><strong>Why referring:</strong></p>
-      <p><%= simple_format(@referral_post.why_referring) %></p>
+      <p class="mb-1">
+        <strong>Submitted:</strong>
+        <%= l referral_request.created_at, format: :long %>
+        <% if referral_request.updated_at && referral_request.updated_at != referral_request.created_at %>
+          · <strong>Updated:</strong> <%= l referral_request.updated_at, format: :long %>
+        <% end %>
+      </p>
 
-      <% if @referral_post.questions.present? %>
-        <div class="mb-3">
-          <h6>Questions</h6>
-          <ol>
-            <% @referral_post.questions.each do |q| %>
-              <li><%= q %></li>
+      <p class="mb-3">
+        <strong>Location:</strong> <%= referral_post.location %> |
+        <strong>Level:</strong> <%= referral_post.job_level %> |
+        <strong>Type:</strong> <%= referral_post.employment_type %>
+      </p>
+
+      <div class="mb-4">
+        <h6>Poster’s context</h6>
+        <p class="mb-0"><%= simple_format(referral_post.why_referring) %></p>
+      </div>
+
+      <% if referral_request.submitted_data_hash.present? %>
+        <div class="mb-4">
+          <h6>Submitted answers</h6>
+          <dl class="mb-0">
+            <% referral_request.submitted_data_hash.each do |question, answer| %>
+              <div class="mb-2">
+                <dt class="fw-semibold"><%= question %></dt>
+                <dd class="mb-0"><%= simple_format(answer.presence || "—") %></dd>
+              </div>
             <% end %>
-          </ol>
+          </dl>
+        </div>
+      <% else %>
+        <p class="mb-4"><em>No additional answers were provided.</em></p>
+      <% end %>
+
+      <% if referral_request.note_to_poster.present? %>
+        <div class="mb-4">
+          <h6>Note to poster</h6>
+          <p class="mb-0"><%= simple_format(referral_request.note_to_poster) %></p>
         </div>
       <% end %>
 
-      <% if logged_in? && current_user != @referral_post.user %>
-        <!-- Link to messaging system -->
-        <%= link_to "Message about this referral", new_message_path(context: "referral_post:#{@referral_post.id}"), class: "tamu-btn tamu-btn-maroon me-2" rescue '#' %>
-
-        <!-- Fallback: also present a quick request form -->
-        <%= form_with url: referral_post_referral_requests_path(@referral_post), method: :post, local: true do |f| %>
-          <% @referral_post.questions.each do |q| %>
-            <div class="mb-2">
-              <label class="form-label"><%= q %></label>
-              <%= text_area_tag "submitted_data[#{q}]", nil, rows: 2, class: "form-control" %>
-            </div>
+      <% if logged_in? && current_user == referral_post.user %>
+        <div class="mb-3 p-3 bg-light rounded">
+          <h6 class="mb-2">Update Request Status</h6>
+          <%= form_with url: update_referral_request_status_path(referral_request), method: :patch, local: true, class: "d-flex align-items-center gap-2" do |f| %>
+            <%= f.select :status, options_for_select([
+              ['Pending', 'pending'],
+              ['Approve', 'approved'],
+              ['Reject', 'rejected'],
+              ['Withdrawn', 'withdrawn']
+            ], selected: referral_request.status), {}, class: "form-select form-select-sm" %>
+            <%= f.submit 'Update Status', class: 'btn btn-sm btn-primary' %>
           <% end %>
-          <%= f.submit "Request Referral", class: "tamu-btn tamu-btn-maroon" %>
-        <% end %>
+        </div>
       <% end %>
 
-      <% if logged_in? && current_user == @referral_post.user %>
-        <%= link_to "Edit", edit_referral_post_path(@referral_post), class: "btn btn-outline-secondary" %>
-        <%= button_to "Delete", referral_post_path(@referral_post), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger" %>
-      <% end %>
+      <div class="d-flex flex-wrap gap-2">
+        <%= link_to "View referral post", referral_post_path(referral_post), class: "btn btn-outline-secondary" %>
+        <% if logged_in? && current_user == referral_post.user %>
+          <%= link_to "Edit post", edit_referral_post_path(referral_post), class: "btn btn-outline-secondary" %>
+          <%= button_to "Delete post", referral_post_path(referral_post), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger" %>
+        <% end %>
+        <% if logged_in? && current_user != referral_post.user %>
+          <%= link_to "Message poster", new_message_path(context: "referral_post:#{referral_post.id}"), class: "tamu-btn tamu-btn-maroon" rescue '#' %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

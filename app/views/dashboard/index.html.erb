@@ -20,6 +20,7 @@
                 <tr>
                   <th>Candidate</th>
                   <th>Post</th>
+                  <th>Link To Request</th>
                   <th>Submitted Data</th>
                   <th style="min-width: 80px !important;">Status</th>
                   <th class="text-center" style="width: 110px !important;">Actions</th>
@@ -35,6 +36,9 @@
                     <td>
                       <%= link_to req.referral_post.title, referral_post_path(req.referral_post) %>
                     </td>
+                    <td style="max-width: 320px;">
+                      <%# <pre style="white-space:pre-wrap; margin:0;"><%= JSON.pretty_generate(req.submitted_data || {}) rescue req.submitted_data.inspect %></pre>
+                      <%= link_to "See Full Submission", referral_post_referral_request_path(req.referral_post, req) %>
                     <td style="max-width: 320px; vertical-align: top;">
                       <% if req.submitted_data.blank? %>
                         none

@@ -71,7 +71,7 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index", as: "dashboard"
 
   resources :referral_posts do
-    resources :referral_requests, only: [ :create ]
+    resources :referral_requests, only: [ :show, :create ]
     # add endpoint so messages can create referral requests via messaging:
     post "referral_requests/from_message", to: "referral_requests#create_from_message", as: :referral_requests_from_message
   end

@@ -3,8 +3,11 @@ require 'rails_helper'
 RSpec.describe DashboardController, type: :controller do
   render_views
   # Assuming you are using Devise or a similar auth helper
-  let!(:user) { User.create(first_name: "Alice", last_name: "Yi", email: "alice.yi@tamu.edu", password: "123456") }
-  let!(:user_bob) { User.create(first_name: "Bob", last_name: "Lai", email: "bob.lai@tamu.edu", password: "123456") }
+  User.destroy_all
+  CompanyVerification.destroy_all
+  ReferralPost.destroy_all
+  let!(:user) { User.create!(first_name: "Alice", last_name: "Yi", email: "alice.yi@tamu.edu", password: "123456") }
+  let!(:user_bob) { User.create!(first_name: "Bob", last_name: "Lai", email: "bob.lai@tamu.edu", password: "123456") }
   let!(:verification_google) { CompanyVerification.create!(user: user, company_email: "alice.yi@google.com", company_name: "Google", is_verified: true) }
   let!(:verification_amazon) { CompanyVerification.create!(user: user, company_email: "alice.yi@amazon.com", company_name: "Amazon", is_verified: true) }
   let!(:verification_samsung) { CompanyVerification.create!(user: user_bob, company_email: "bob.lai@samsung.com", company_name: "Samsung", is_verified: true) }

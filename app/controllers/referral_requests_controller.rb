@@ -1,11 +1,14 @@
 class ReferralRequestsController < ApplicationController
   before_action :require_login
-  before_action :set_referral_post, only: %i[create create_from_message]
-  before_action :set_referral_request, only: %i[update_status]
+  before_action :set_referral_post, only: %i[show create create_from_message]
+  before_action :set_referral_request, only: %i[show update_status]
 
   # def new
   #   @referral_request = @referral_post.referral_requests.new(user: current_user)
   # end
+  #
+  def show
+  end
 
   def create
     submitted_payload = normalize_submitted_data(params[:submitted_data] || params[:referral_request]&.fetch(:submitted_data, nil))
