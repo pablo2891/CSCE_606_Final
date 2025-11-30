@@ -35,10 +35,19 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    @old_password = params[:user][:old_password]
+    @new_password = params[:user][:password]
+
     return redirect_to user_path(@user), alert: "Unauthorized" unless current_user == @user
 
     if params[:remove_resume] == "1"
       @user.resume.purge_later
+    end
+
+    if (!@new_password.blank? && @old_password.blank?) || (!@old_password.blank? && !@user.authenticate(@old_password))
+      flash.now[:error] = "Old password is incorrect"
+      render :edit
+      return
     end
 
     if @user.update(user_params)
@@ -61,7 +70,11 @@ class UsersController < ApplicationController
 
     exp = params.require(:experience).permit(:title, :company, :start_date, :end_date, :description).to_h
 
-    if exp["title"].blank? || exp["company"].blank? || exp["start_date"].blank?
+    parsed_start = Date.parse(exp["start_date"]) rescue nil
+    parsed_end   = (Date.parse(exp["end_date"])  rescue nil) || Date.today
+    date_valid  = parsed_start.nil? || (parsed_start <= Date.today && parsed_end <= Date.today && parsed_start < parsed_end)
+
+    if exp["title"].blank? || exp["company"].blank? || !date_valid
       flash.now[:error] = "Failed to add experience."
       render :add_experience
       return
@@ -89,9 +102,12 @@ class UsersController < ApplicationController
     @index = params[:index].to_i
 
     updated_exp = params.require(:experience).permit(:title, :company, :start_date, :end_date, :description).to_h
+    parsed_start = Date.parse(updated_exp["start_date"]) rescue nil
+    parsed_end   = (Date.parse(updated_exp["end_date"])  rescue nil) || Date.today
+    date_valid  = parsed_start.nil? || (parsed_start <= Date.today && parsed_end <= Date.today && parsed_start < parsed_end)
     @user.experiences_data[@index] = updated_exp
 
-    if @user.save
+    if @user.save && date_valid
       redirect_to user_path(@user), notice: "Experience updated successfully!"
     else
       flash.now[:error] = @user.errors.full_messages.join(", ")
@@ -126,8 +142,12 @@ class UsersController < ApplicationController
 
     edu = params.require(:education).permit(:degree, :school, :start_date, :end_date, :description).to_h
 
+    parsed_start = Date.parse(edu["start_date"]) rescue nil
+    parsed_end   = (Date.parse(edu["end_date"])  rescue nil) || Date.today
+    date_valid  = parsed_start.nil? || (parsed_start <= Date.today && parsed_start < parsed_end)
+
     # Require degree and school for now; start_date is optional in the UI/tests
-    if edu["degree"].blank? || edu["school"].blank?
+    if edu["degree"].blank? || edu["school"].blank? || !date_valid
       flash.now[:error] = "Failed to add education."
       render :add_education
       return
@@ -155,9 +175,12 @@ class UsersController < ApplicationController
     @index = params[:index].to_i
 
     updated_edu = params.require(:education).permit(:degree, :school, :start_date, :end_date, :description).to_h
+    parsed_start = Date.parse(updated_edu["start_date"]) rescue nil
+    parsed_end   = (Date.parse(updated_edu["end_date"])  rescue nil) || Date.today
+    date_valid  = parsed_start.nil? || (parsed_start <= Date.today && parsed_start < parsed_end)
     @user.educations_data[@index] = updated_edu
 
-    if @user.save
+    if @user.save && date_valid
       redirect_to user_path(@user), notice: "Education updated successfully!"
     else
       flash.now[:error] = @user.errors.full_messages.join(", ")

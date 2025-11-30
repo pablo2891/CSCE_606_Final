@@ -34,7 +34,12 @@
           </div>
 
           <div class="mb-3">
-            <%= f.label :password, class: "form-label fw-semibold" %>
+            <%= f.label :old_password, "Current password", class: "form-label fw-semibold" %>
+            <%= f.password_field :old_password, class: "form-control", placeholder: "Must type in current password to change password" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, "New password", class: "form-label fw-semibold" %>
             <%= f.password_field :password, class: "form-control", placeholder: "Leave blank to keep current password" %>
           </div>
 

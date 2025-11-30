@@ -28,9 +28,19 @@ Feature: Edit User Profile
   Scenario: User submits new password without confirmation
     Given I am logged in
     And I visit my edit profile page
-    When I fill in "Password" with "newpassword123"
+    When I fill in "Current password" with "password"
+    When I fill in "New password" with "newpassword123"
     And I press "Save Changes"
     Then I should see "Password confirmation doesn't match Password"
+
+  Scenario: User submits incorrect old password
+    Given I am logged in
+    And I visit my edit profile page
+    When I fill in "Current password" with "password123"
+    When I fill in "New password" with "newpassword123"
+    When I fill in "Password confirmation" with "newpassword123"
+    And I press "Save Changes"
+    Then I should see "Old password is incorrect"
 
   Scenario: Logged-in user attempts to edit another user's profile
     Given I am logged in as a user with first name "John" and last name "Doe"
