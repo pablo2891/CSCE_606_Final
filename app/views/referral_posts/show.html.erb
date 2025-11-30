@@ -17,6 +17,15 @@
         <% if request %>
           <h5 class="mt-4 mb-3 text-center text-tamu-maroon fw-bold">You have already requested a referral for this post.</h5>
           <p class="text-center">Request Status: <span class="badge bg-secondary"><%= request.status.capitalize %></span></p>
+          <%= form_with url: referral_post_referral_request_path(@referral_post, request), method: :patch, local: true do |f| %>
+            <% request.submitted_data_hash.each do |question, answer| %>
+              <div class="mb-2">
+                <dt class="fw-semibold"><%= question %></dt>
+                  <%= text_area_tag "submitted_data[#{question}]", answer, rows: 1, class: "form-control" %>
+              </div>
+            <% end %>
+            <div class="d-flex justify-content-center mt-4"><%= f.submit "Edit Request", class: "tamu-btn tamu-btn-maroon" %></div>
+          <% end %>
         <% else %>
           <% if @referral_post.questions.present? %>
             <h5 class="mt-4 mb-3 text-center text-tamu-maroon fw-bold">Request a Referral Form</h5>

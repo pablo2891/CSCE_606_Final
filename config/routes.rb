@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   end
 
   resources :referral_posts do
-    resources :referral_requests, only: [ :create, :new ]
+    resources :referral_requests, only: [ :create, :new, :update ]
   end
 
   # Login/logout
