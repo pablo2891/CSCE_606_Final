@@ -17,6 +17,8 @@ class DashboardController < ApplicationController
     # --- Filter Setup ---
     @selected_user = params[:username]
     @selected_company = params[:company_name]
+
+    @status_options = [ "Active", "Paused", "Closed" ]
     @selected_status = params[:status]
 
     @date_ranges = [ "24 hours", "7 days", "30 days", "90 days", "180 days", "1 year" ]
@@ -51,9 +53,13 @@ class DashboardController < ApplicationController
     end
 
     # 4. Filter by selected_status
-    if @selected_status.present?
-      @all_referrals = @all_referrals.where(status: @selected_status)
+    desired_status = case @selected_status
+    when "Active" then :active
+    when "Paused" then :paused
+    when "Closed" then :closed
+    else :active
     end
+    @all_referrals = @all_referrals.where(status: desired_status)
 
     # 5. Filter by selected_created_since (Convert string options to Time objects)
     if @selected_created_since.present?
@@ -64,7 +70,6 @@ class DashboardController < ApplicationController
       when "90 days"  then 90.days.ago
       when "180 days" then 180.days.ago
       when "1 year"   then 1.year.ago
-      else nil
       end
 
       @all_referrals = @all_referrals.where("referral_posts.created_at >= ?", time_threshold) if time_threshold

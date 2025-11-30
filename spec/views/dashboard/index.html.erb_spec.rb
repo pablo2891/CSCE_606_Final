@@ -67,6 +67,7 @@ RSpec.describe "dashboard/index.html.erb", type: :view do
     assign(:location_options, [ "Remote", "On-site", "Hybrid" ])
     assign(:job_level_options, [ "Internship", "Entry Level", "Mid Level", "Senior Level", "Executive" ])
     assign(:employment_type_options, [ "Full-time", "Part-time", "Contract", "Internship" ])
+    assign(:status_options, [ "Active", "Paused", "Closed" ])
     assign(:date_ranges, [ "24 hours", "7 days", "30 days", "90 days" ])
     # 4. Assign FILTER INPUTS
     # These can be nil, but it's safer to assign them to avoid warnings

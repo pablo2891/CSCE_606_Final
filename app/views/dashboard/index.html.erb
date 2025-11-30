@@ -126,6 +126,8 @@
     </div>
   </div>
 
+  <!-- Browse Referrals -->
+
   <hr class="my-5">
 
   <div class="d-flex justify-content-between align-items-end mb-3">
@@ -154,6 +156,11 @@
         <div class="col-md-3">
           <%= f.label :username, "Referrer Username", class: "form-label small text-muted" %>
           <%= f.text_field :username, value: @selected_user, class: "form-control form-control-sm", placeholder: "Search by user" %>
+        </div>
+
+        <div class="col-md-2">
+          <%= f.label :status, "Post Status", class: "form-label small text-muted" %>
+          <%= f.select :status, options_for_select(@status_options, @selected_status || "Active"), {}, { class: "form-select form-select-sm" } %>
         </div>
 
         <div class="col-md-2">

@@ -23,7 +23,7 @@ RSpec.describe DashboardController, type: :controller do
     location: "Remote",
     job_level: "Senior Level",
     employment_type: "Full-time",
-    status: 0, # Assuming 0 is active/open
+    status: :active,
     created_at: 1.hour.ago
   )}
 
@@ -36,7 +36,7 @@ RSpec.describe DashboardController, type: :controller do
     location: "On-site",
     job_level: "Entry Level",
     employment_type: "Part-time",
-    status: 1, # Assuming 1 is closed/draft
+    status: :active,
     created_at: 10.days.ago
   )}
 
@@ -49,7 +49,20 @@ RSpec.describe DashboardController, type: :controller do
     location: "On-site",
     job_level: "Entry Level",
     employment_type: "Part-time",
-    status: 1, # Assuming 1 is closed/draft
+    status: :active,
+    created_at: 10.days.ago
+  )}
+
+  let!(:bob_post_closed) { ReferralPost.create(user: user_bob,
+    title: "Samsung Data Science Role",
+    company_verification: verification_samsung,
+    company_name: "Samsung",
+    job_title: "Data Scientist",
+    department: "Sales",
+    location: "On-site",
+    job_level: "Entry Level",
+    employment_type: "Part-time",
+    status: :closed,
     created_at: 10.days.ago
   )}
 
@@ -68,6 +81,7 @@ RSpec.describe DashboardController, type: :controller do
       it "assigns all posts to @all_referrals" do
         get :index
         expect(assigns(:all_referrals)).to include(matching_post, other_post)
+        expect(assigns(:all_referrals)).not_to include(bob_post_closed)
       end
     end
 
@@ -127,11 +141,23 @@ RSpec.describe DashboardController, type: :controller do
       end
 
       context "by status" do
-        it "filters by status integer/string" do
+        it "filters by status active" do
           # Assuming param passed is "0" for the first enum status
-          get :index, params: { status: 0 }
+          get :index, params: { status: "Active" }
           expect(assigns(:all_referrals)).to include(matching_post)
-          expect(assigns(:all_referrals)).not_to include(other_post)
+          expect(assigns(:all_referrals)).not_to include(bob_post_closed)
+        end
+        it "filters by status closed" do
+          # Assuming param passed is "0" for the first enum status
+          get :index, params: { status: "Closed" }
+          expect(assigns(:all_referrals)).to include(bob_post_closed)
+          expect(assigns(:all_referrals)).not_to include(matching_post)
+        end
+
+        it "filters by status paused" do
+          # Assuming param passed is "0" for the first enum status
+          get :index, params: { status: "Paused" }
+          expect(assigns(:all_referrals).size).to eq(0)
         end
       end
 
