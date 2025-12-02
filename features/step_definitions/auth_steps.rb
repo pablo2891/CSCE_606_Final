@@ -73,6 +73,21 @@ Given("I am logged in") do
   expect(page).to have_button("Log Out")
 end
 
+Given('I am logged in as a user with email {string}') do |email|
+  @user = User.create!(
+    first_name: "Test",
+    last_name: "User",
+    email: email,
+    password: "password",
+    password_confirmation: "password"
+  )
+
+  visit new_session_path
+  fill_in "Email", with: @user.email
+  fill_in "Password", with: "password"
+  click_button "Login"
+end
+
 When("I click logout") do
   click_button('Log Out', match: :first)
 end

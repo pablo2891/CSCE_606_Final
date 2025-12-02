@@ -84,7 +84,7 @@
 
         <h2 class="text-center mb-4 text-tamu-maroon fw-bold mt-5">Education & Experience</h2>
 
-        <div class="border border-gray-100 rounded-3 px-4 pb-4 pt-2">
+        <div id="experience-section" class="border border-gray-100 rounded-3 px-4 pb-4 pt-2">
           <h2 class="text-tamu-maroon fw-bold mb-3">Experience</h2>
           <ul class="list-group mb-3">
             <% if @user.experiences_data.any? %>
@@ -114,7 +114,7 @@
           <%= link_to "Add Experience", add_experience_user_path(@user), class: "tamu-btn tamu-btn-maroon text-decoration-none me-2" %>
         </div>
 
-        <div class="mt-5 border border-gray-100 rounded-3 px-4 pb-4 pt-2">
+        <div id="education-section" class="mt-5 border border-gray-100 rounded-3 px-4 pb-4 pt-2">
           <h2 class="text-tamu-maroon fw-bold mb-3">Education</h2>
           <ul class="list-group mb-3">
           <% if @user.educations_data.any? %>

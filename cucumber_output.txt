@@ -1,0 +1,50 @@
+Feature: Coverage Gap Filling
+  As a developer
+  I want to ensure all code paths are covered
+  So that I can achieve 100% test coverage
+
+  Background:                                                 # features/coverage_gap_filling.feature:6
+    Given I am logged in as a user with email "test@tamu.edu" # features/step_definitions/auth_steps.rb:76
+
+  # UsersController#update - Remove Resume
+  Scenario: User removes resume                       # features/coverage_gap_filling.feature:10
+    Given I have a resume attached                    # features/step_definitions/coverage_gap_steps.rb:1
+      No such file or directory @ rb_sysopen - /Users/pradh/Documents/Khussal/TAMU/1st Semester/Software Engineering/LinkedOut/Project-3/spec/fixtures/files/sample_resume.pdf (Errno::ENOENT)
+      ./features/step_definitions/coverage_gap_steps.rb:2:in 'File#initialize'
+      ./features/step_definitions/coverage_gap_steps.rb:2:in 'IO.open'
+      ./features/step_definitions/coverage_gap_steps.rb:2:in `"I have a resume attached"'
+      features/coverage_gap_filling.feature:11:in `I have a resume attached'
+    When I visit my edit profile page                 # features/step_definitions/edit_user_profile_steps.rb:1
+    And I check "Remove resume"                       # features/step_definitions/coverage_gap_steps.rb:5
+    And I click "Save Changes"                        # features/step_definitions/messaging_steps.rb:180
+    Then I should see "Profile updated successfully!" # features/step_definitions/auth_steps.rb:130
+# UsersController#update - Password Change Failures
+# UsersController#create_experience - Validation Failures
+# UsersController#create_education - Validation Failures
+# CompanyVerificationsController#create - Save Failure
+# CompanyVerificationsController#verify - Invalid Token
+# UsersController#delete_experience - Save Failure
+# UsersController#delete_education - Save Failure
+
+Failing Scenarios:
+cucumber features/coverage_gap_filling.feature:10 # Scenario: User removes resume
+
+1 scenario (1 failed)
+6 steps (1 failed, 4 skipped, 1 passed)
+0m1.594s
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ Share your Cucumber Report with your team at https://reports.cucumber.io     │
+│                                                                              │
+│ Command line option:    --publish                                            │
+│ Environment variable:   CUCUMBER_PUBLISH_ENABLED=true                        │
+│ cucumber.yml:           default: --publish                                   │
+│                                                                              │
+│ More information at https://cucumber.io/docs/cucumber/environment-variables/ │
+│                                                                              │
+│ To disable this message, specify CUCUMBER_PUBLISH_QUIET=true or use the      │
+│ --publish-quiet option. You can also add this to your cucumber.yml:          │
+│ default: --publish-quiet                                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+Stopped processing SimpleCov as a previous error not related to SimpleCov has been detected
+Coverage report generated for Cucumber to /Users/pradh/Documents/Khussal/TAMU/1st Semester/Software Engineering/LinkedOut/Project-3/coverage/cucumber.
+Line Coverage: 11.84% (81 / 684)

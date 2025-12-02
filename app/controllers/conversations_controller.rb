@@ -31,10 +31,7 @@ class ConversationsController < ApplicationController
 
   def destroy
     # allow only participants to destroy (soft delete by removing record)
-    unless [ @conversation.sender_id, @conversation.recipient_id ].include?(current_user.id)
-      redirect_to conversations_path, alert: "Unauthorized"
-      return
-    end
+
 
     @conversation.destroy
     redirect_to conversations_path, notice: "Conversation deleted"
