@@ -35,7 +35,7 @@ class CompanyVerificationsController < ApplicationController
       verification.update(is_verified: true, verified_at: Time.current)
       redirect_to company_verifications_path, notice: "Company email successfully verified!"
     else
-      redirect_to root_path, alert: "Invalid or expired verification link."
+      redirect_to company_verifications_path, alert: "Invalid or expired verification link."
     end
   end
 

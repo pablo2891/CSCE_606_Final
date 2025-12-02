@@ -91,7 +91,7 @@ RSpec.describe CompanyVerificationsController, type: :controller do
     end
     it "fails if the token is incorrect" do
       get :verify, params: { id: verification2.id, token: "incorrect_token" }
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(company_verifications_path)
     end
 
     it "passes if the token is incorrect" do

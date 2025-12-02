@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "LinkedOut <no-reply@linkedout.local>"
+  default from: "LinkedOut <#{ENV.fetch("MAILER_FROM_EMAIL", "no-reply@linkedout.local")}>"
   layout "mailer"
 end

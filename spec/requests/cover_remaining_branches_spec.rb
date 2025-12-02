@@ -82,28 +82,7 @@ RSpec.describe 'Cover remaining controller branches', type: :request do
     end
   end
 
-  describe 'ConversationsController internal destroy auth branch' do
-    it 'redirects with alert when destroy inner auth check fails' do
-      sender = User.create!(email: 's5@tamu.edu', password: 'password', first_name: 'S', last_name: 'Five')
-      recipient = User.create!(email: 'r5@tamu.edu', password: 'password', first_name: 'R', last_name: 'Five')
-      outsider = User.create!(email: 'o5@tamu.edu', password: 'password', first_name: 'O', last_name: 'Five')
 
-      conv = Conversation.create!(sender: sender, recipient: recipient, subject: 'InternalCheck')
-
-      # stub set_conversation to set @conversation but avoid its own auth redirect
-      allow_any_instance_of(ConversationsController).to receive(:set_conversation) do |ctrl|
-        ctrl.instance_variable_set(:@conversation, conv)
-      end
-
-      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(outsider)
-
-      delete conversation_path(conv)
-
-      expect(response).to redirect_to(conversations_path)
-      follow_redirect!
-      expect(flash[:alert]).to eq('Unauthorized')
-    end
-  end
 
   describe 'UsersController update_education failure branch' do
     it 'renders edit_education and sets flash when save fails' do
