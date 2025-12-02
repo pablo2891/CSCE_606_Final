@@ -40,14 +40,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_020736) do
   end
 
   create_table "company_verifications", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.string "company_email", null: false
     t.string "company_name", null: false
     t.boolean "is_verified", default: false
     t.string "verification_token"
     t.datetime "verified_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["user_id", "company_email"], name: "index_company_verifications_on_user_id_and_company_email", unique: true
     t.index ["user_id"], name: "index_company_verifications_on_user_id"
     t.index ["verification_token"], name: "index_company_verifications_on_verification_token", unique: true
@@ -75,6 +75,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_020736) do
   end
 
   create_table "referral_posts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "company_verification_id", null: false
     t.string "company_name", null: false
@@ -84,8 +86,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_020736) do
     t.integer "status", default: 0, null: false
     t.json "additional_criteria", default: {}
     t.json "request_criteria", default: {}
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.string "job_title"
     t.string "department"
     t.string "location"
@@ -99,19 +99,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_020736) do
   end
 
   create_table "referral_requests", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "user_id", null: false
     t.integer "referral_post_id", null: false
     t.text "note_to_poster"
     t.json "submitted_data", default: {}
     t.integer "status", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["referral_post_id"], name: "index_referral_requests_on_referral_post_id"
     t.index ["user_id", "referral_post_id"], name: "index_referral_requests_on_user_id_and_referral_post_id", unique: true
     t.index ["user_id"], name: "index_referral_requests_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "email", null: false
     t.string "password_digest"
     t.string "first_name"
@@ -125,8 +127,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_020736) do
     t.string "github_url"
     t.json "experiences_data", default: [], null: false
     t.json "educations_data", default: [], null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["tamu_verification_token"], name: "index_users_on_tamu_verification_token", unique: true
   end
