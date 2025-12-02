@@ -576,7 +576,7 @@ end
 **Example:**
 - Company: "Google" → Domain: "google"
 - Email: "user@google.com" → Domain: "google.com"
-- Match: ✓ (google is in google.com)
+- Match: (google is in google.com)
 
 ### JSONB Storage Pattern
 
@@ -824,7 +824,3 @@ User.where(verified: true)
 ```
 
 ---
-
-## License
-
-This project is open-source under the [MIT License](LICENSE).
