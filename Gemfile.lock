@@ -442,10 +442,6 @@ GEM
       ffi (~> 1.1)
       memoist3 (~> 1.0.0)
     thor (1.4.0)
-    thruster (0.1.16)
-    thruster (0.1.16-aarch64-linux)
-    thruster (0.1.16-arm64-darwin)
-    thruster (0.1.16-x86_64-linux)
     tilt (2.6.1)
     timeout (0.4.4)
     tsort (0.2.0)
@@ -517,7 +513,6 @@ DEPENDENCIES
   sprockets-rails
   sqlite3 (>= 2.1)
   stimulus-rails
-  thruster
   turbo-rails
   tzinfo-data
   web-console
