@@ -6,6 +6,10 @@ This document covers local setup, configuration, testing, deployment, and develo
 
 ---
 
+Deployed with Heroku: [https://linkedout-aggies-0f3d429fef3a.herokuapp.com/users/new](https://linkedout-aggies-0f3d429fef3a.herokuapp.com/users/new)
+
+---
+
 ## Table of Contents
 - [Quick Start (Local)](#quick-start-local)
 - [Environment Variables & Credentials](#environment-variables--credentials)
