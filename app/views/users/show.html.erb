@@ -32,6 +32,7 @@
               <div class="card rounded-md p-3 border-tamu-gray-300">
                 <h5 class="font-bold mb-2">Contact</h5>
                 <p class="mb-1"><strong>Email:</strong> <%= @user.email %></p>
+                <p class="mb-1"><strong>Referrals:</strong> <%= @referral_count %></p>
                 <% if @user.linkedin_url.present? %>
                   <p class="mb-1"><strong>LinkedIn:</strong> <a href="<%= @user.linkedin_url %>" target="_blank" class="text-tamu-maroon hover:underline"><%= @user.linkedin_url %></a></p>
                 <% end %>
