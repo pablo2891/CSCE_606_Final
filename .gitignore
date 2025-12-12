@@ -42,3 +42,5 @@ coverage/
 
 # Ignore encrypted per-environment credentials in development
 /config/credentials/
+
+/config/credentials/development.key
